@@ -1,4 +1,14 @@
-﻿@page "/register"
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@page "/register"
+
+@using BlazorConduit.Store.Users.Actions 
+@using BlazorConduit.Models.Authentication.Dtos
+@using BlazorConduit.Models.Authentication.RequestModels
+@using BlazorConduit.Models.Authentication.Validation
+@using Fluxor 
+
+@inject IDispatcher Dispatcher
 
 <div class="auth-page">
     <div class="container page">
@@ -10,26 +20,48 @@
                     <a href="">Have an account?</a>
                 </p>
 
-                <ul class="error-messages">
-                    <li>That email is already taken</li>
-                </ul>
 
-                <form>
+
+                <EditForm Model="validationModel" OnValidSubmit="OnSignUpClicked">
+                    <DataAnnotationsValidator />
+                    <ul class="error-messages">
+                        <li>That email is already taken</li>
+                        <ValidationSummary />
+                    </ul>
+
                     <fieldset class="form-group">
-                        <input class="form-control form-control-lg" type="text" placeholder="Your Name">
+                        <InputText class="form-control form-control-lg" placeholder="Your Name" @bind-Value="validationModel.UserName" />
                     </fieldset>
                     <fieldset class="form-group">
-                        <input class="form-control form-control-lg" type="text" placeholder="Email">
+                        <InputText class="form-control form-control-lg" placeholder="Email" @bind-Value="validationModel.UserName" />
                     </fieldset>
                     <fieldset class="form-group">
-                        <input class="form-control form-control-lg" type="password" placeholder="Password">
+                        <InputText class="form-control form-control-lg" placeholder="Password" type="password" @bind-Value="validationModel.Password" />
                     </fieldset>
-                    <button class="btn btn-lg btn-primary pull-xs-right">
+                    <button type="submit" class="btn btn-lg btn-primary pull-xs-right">
                         Sign up
                     </button>
-                </form>
+                </EditForm>
             </div>
 
         </div>
     </div>
 </div>
+
+@code {
+
+    private RegisterUserValidationModel validationModel = new RegisterUserValidationModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private void OnSignUpClicked()
+    {
+        var registerRequest = new AuthenticationRequestModel(new AuthenticationRequestDto(validationModel.UserName, validationModel.Email!, validationModel.Password!));
+
+        Dispatcher.Dispatch(new RegisterUserAction(registerRequest));
+    }
+
+}

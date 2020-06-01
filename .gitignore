@@ -1,0 +1,25 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# IDEs and editors
+/.idea/
+.project
+.classpath
+*.launch
+.settings/
+/.vs/
+*.csproj.user
+
+
+#System Files
+.DS_Store
+Thumbs.db
+*.iml
+bin/
+obj/
+logs/
+.tmp/
+.nuke
+/.editorconfig
+*.csproj.user
+*.DotSettings.user
+node_modules/S
