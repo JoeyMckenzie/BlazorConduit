@@ -1,6 +1,6 @@
 ﻿using BlazorConduit.Models.Authentication.Dtos;
 
-namespace BlazorConduit.Models.Authentication.RequestModels
+namespace BlazorConduit.Models.Authentication.Requests
 {
     public class RegisterUserRequest
     {

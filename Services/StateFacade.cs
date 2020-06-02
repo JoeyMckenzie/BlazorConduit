@@ -1,4 +1,4 @@
-﻿using BlazorConduit.Models.Authentication.RequestModels;
+﻿using BlazorConduit.Models.Authentication.Requests;
 using BlazorConduit.Store.Users.Actions;
 using Fluxor;
 

@@ -1,12 +1,12 @@
-﻿using BlazorConduit.Models.Authentication.RequestModels;
+﻿using BlazorConduit.Models.Authentication.Requests;
 
 namespace BlazorConduit.Store.Users.Actions
 {
     public class RegisterUserAction
     {
-        public RegisterUserAction(RegisterUserRequest requestModel) =>
+        public RegisterUserAction(LoginUserRequest requestModel) =>
             RequestModel = requestModel;
         
-        public RegisterUserRequest RequestModel { get; }
+        public LoginUserRequest RequestModel { get; }
     }
 }

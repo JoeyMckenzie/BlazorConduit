@@ -3,7 +3,7 @@
 @page "/register"
 
 @using BlazorConduit.Models.Authentication.Dtos
-@using BlazorConduit.Models.Authentication.RequestModels
+@using BlazorConduit.Models.Authentication.Requests
 @using BlazorConduit.Models.Authentication.Validation
 @using BlazorConduit.Services
 @using BlazorConduit.Store
@@ -97,8 +97,8 @@
         if (isValid)
         {
             // The validation model ensures the strings are not null/empty, let the compiler know with the bang (!) operator
-            var userRegisterationDto = new RegisterUserDto(validationModel.Username!, validationModel.Email!, validationModel.Password!);
-            var userRegistrationRequest = new RegisterUserRequest(userRegisterationDto);
+            var userRegistrationDto = new RegisterUserDto(validationModel.Username!, validationModel.Email!, validationModel.Password!);
+            var userRegistrationRequest = new RegisterUserRequest(userRegistrationDto);
 
             StateFacade.RegisterUser(userRegistrationRequest);
         }
