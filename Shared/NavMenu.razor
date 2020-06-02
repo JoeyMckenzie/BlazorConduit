@@ -1,4 +1,11 @@
-﻿<nav class="navbar navbar-light">
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@using BlazorConduit.Store
+@using Fluxor
+
+@inject IState<AppState> State
+
+<nav class="navbar navbar-light">
     <div class="container">
         <a class="navbar-brand" href="/#/">conduit</a>
         <ul class="nav navbar-nav pull-xs-right">
@@ -18,10 +25,28 @@
                 </NavLink>
             </li>
             <li class="nav-item">
-                <NavLink class="nav-link" href="/register">
-                    Sign Up
-                </NavLink>
+                @if (State.Value.IsAuthenticated)
+                {
+                    <NavLink class="nav-link" href="/profile">
+                        @State.Value.CurrentUser!.Email
+                    </NavLink>
+                }
+                else
+                {
+                    <NavLink class="nav-link" href="/register">
+                        Sign Up
+                    </NavLink>
+                }
             </li>
         </ul>
     </div>
 </nav>
+
+@code {        
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+}

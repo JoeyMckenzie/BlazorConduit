@@ -1,32 +1,27 @@
-﻿using BlazorConduit.Models.Authentication.Dtos;
-using BlazorConduit.Models.Authentication.RequestModels;
-using BlazorConduit.Models.Authentication.ViewModels;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using BlazorConduit.Models.Authentication.RequestModels;
+using Blazored.LocalStorage;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BlazorConduit.Services
 {
     public class ConduitApiService
     {
-        private readonly HttpClient _httpClient; 
+        private readonly HttpClient _httpClient;
+        private readonly ILocalStorageService _storageService;
 
-        public ConduitApiService(HttpClient httpClient) =>
-            _httpClient = httpClient;
+        public ConduitApiService(HttpClient httpClient, ILocalStorageService storageService) =>
+            (_httpClient, _storageService) = (httpClient, storageService);
 
-        public Task<HttpResponseMessage> RegisterUser(AuthenticationRequestModel request)
+        public Task<HttpResponseMessage> RegisterUser(RegisterUserRequest request)
         {
-            return _httpClient.PostAsJsonAsync("/user/register", request);
+            return _httpClient.PostAsJsonAsync("users", request);
         }
 
         public Task GetArticles()
         {
-            return _httpClient.GetAsync("/articles");
+            return _httpClient.GetAsync("articles");
         }
     }
 }

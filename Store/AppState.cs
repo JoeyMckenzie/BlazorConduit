@@ -1,4 +1,6 @@
-﻿using BlazorConduit.Models.Authentication.ViewModels;
+﻿using BlazorConduit.Models.Authentication.Dtos;
+using BlazorConduit.Models.Authentication.ViewModels;
+using BlazorConduit.Models.Common.ViewModels;
 using Fluxor;
 using System;
 using System.Collections.Generic;
@@ -9,16 +11,16 @@ namespace BlazorConduit.Store
 {
     public class AppState
     {
-        public AppState(bool isLoading, ConduitUserViewModel? currentUser, string errorMessage) =>
-            (IsLoading, CurrentUser, ErrorMessage) = (isLoading, currentUser, errorMessage);
+        public AppState(bool isLoading, ConduitUserDto? currentUser, IEnumerable<string>? currentErrors) =>
+            (IsLoading, CurrentUser, CurrentErrors) = (isLoading, currentUser, currentErrors);
 
         public bool IsLoading { get; }
 
-        public ConduitUserViewModel? CurrentUser { get; }
+        public ConduitUserDto? CurrentUser { get; }
 
-        public string ErrorMessage { get; }
+        public IEnumerable<string>? CurrentErrors { get; }
 
-        public bool HasCurrentError => !string.IsNullOrWhiteSpace(ErrorMessage);
+        public bool HasCurrentErrors => !(CurrentErrors is null) && CurrentErrors.Any();
 
         public bool IsAuthenticated => !(CurrentUser is null);
     }

@@ -1,9 +1,5 @@
 ﻿using BlazorConduit.Store.Users.Actions;
 using Fluxor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlazorConduit.Store.Users.Reducers
 {
@@ -11,10 +7,14 @@ namespace BlazorConduit.Store.Users.Reducers
     {
         [ReducerMethod]
         public static AppState ReduceRegisterUserAction(AppState state, RegisterUserAction action) =>
-            new AppState(true, null, string.Empty);
+            new AppState(true, null, null);
 
         [ReducerMethod]
         public static AppState ReduceRegisterUserSuccessAction(AppState state, RegisterUserSuccessAction action) =>
-            new AppState(false, action.User, string.Empty);
+            new AppState(false, action.User, null);
+
+        [ReducerMethod]
+        public static AppState ReduceRegisterUserFailureAction(AppState state, RegisterUserFailureAction action) =>
+            new AppState(false, null, action.Errors);
     }
 }

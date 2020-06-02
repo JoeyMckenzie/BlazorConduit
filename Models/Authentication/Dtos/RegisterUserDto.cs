@@ -2,10 +2,10 @@
 {
     public class RegisterUserDto
     {
-        public RegisterUserDto(string userName, string email, string password) =>
-            (UserName, Email, Password) = (UserName, email, password);
+        public RegisterUserDto(string username, string email, string password) =>
+            (Username, Email, Password) = (username, email, password);
 
-        public string UserName { get; set; }
+        public string Username { get; }
 
         public string Email { get; }
 

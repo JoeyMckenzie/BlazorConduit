@@ -1,16 +1,12 @@
-﻿using BlazorConduit.Models.Authentication.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BlazorConduit.Models.Authentication.Dtos;
 
 namespace BlazorConduit.Store.Users.Actions
 {
     public class RegisterUserSuccessAction
     {
-        public RegisterUserSuccessAction(ConduitUserViewModel user) =>
+        public RegisterUserSuccessAction(ConduitUserDto user) =>
             User = user;
 
-        public ConduitUserViewModel User { get; }
+        public ConduitUserDto User { get; }
     }
 }

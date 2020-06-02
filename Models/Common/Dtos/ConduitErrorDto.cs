@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorConduit.Models.Authentication.ViewModels
+namespace BlazorConduit.Models.Common.Dtos
 {
-    public class RegisterUserViewModel
+    public class ConduitErrorDto
     {
     }
 }

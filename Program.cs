@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using BlazorConduit.Services;
 using Fluxor;
 using System.Reflection;
+using Blazored.LocalStorage;
 
 namespace BlazorConduit
 {
@@ -23,11 +24,20 @@ namespace BlazorConduit
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri("https://conduit.productionready.io/api") });
+            builder.Services.AddTransient(_ => new HttpClient { BaseAddress = new Uri("https://conduit.productionready.io/api/") });
 
             // Add custom services
             builder.Services.TryAddScoped<ConduitApiService>();
-            builder.Services.AddFluxor(options => options.ScanAssemblies(Assembly.GetExecutingAssembly()));
+            builder.Services.TryAddScoped<StateFacade>();
+            builder.Services.TryAddScoped<ErrorFormattingService>();
+
+            // Add package services
+            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddFluxor(options => 
+            {
+                options.ScanAssemblies(Assembly.GetExecutingAssembly());
+                options.UseReduxDevTools();
+            });
 
             await builder.Build().RunAsync();
         }

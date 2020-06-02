@@ -2,13 +2,15 @@
 
 @page "/register"
 
-@using BlazorConduit.Store.Users.Actions 
 @using BlazorConduit.Models.Authentication.Dtos
 @using BlazorConduit.Models.Authentication.RequestModels
 @using BlazorConduit.Models.Authentication.Validation
-@using Fluxor 
+@using BlazorConduit.Services
+@using BlazorConduit.Store
+@using Fluxor
 
-@inject IDispatcher Dispatcher
+@inject IState<AppState> State
+@inject StateFacade StateFacade
 
 <div class="auth-page">
     <div class="container page">
@@ -22,18 +24,42 @@
 
 
 
-                <EditForm Model="validationModel" OnValidSubmit="OnSignUpClicked">
+                <EditForm EditContext="editContext" OnSubmit="OnSignUpClicked">
                     <DataAnnotationsValidator />
-                    <ul class="error-messages">
-                        <li>That email is already taken</li>
-                        <ValidationSummary />
-                    </ul>
+
+                    @* 
+                        Bit of a hack, but alas, my StackOverflow skills were overcome when searching on how 
+                        override the custom CSS for the <ValidationSummary /> component. This does the job for now.
+                    *@
+                    @if (!isValid)
+                    {
+                        <ul class="error-messages">
+                            @* Display any validation errors *@
+                            @if (!(editContext is null))
+                            {
+                                @foreach (var errorMessage in editContext.GetValidationMessages())
+                                {
+                                    <li>@errorMessage</li>
+                                }
+                            }
+
+                            @* Display any errors returned from the API response *@
+                            @if (State.Value.HasCurrentErrors)
+                            {
+                                @foreach (var error in State.Value.CurrentErrors!)
+                                {
+                                    <li>@error</li>
+
+                                }
+                            }
+                        </ul>
+                    }
 
                     <fieldset class="form-group">
-                        <InputText class="form-control form-control-lg" placeholder="Your Name" @bind-Value="validationModel.UserName" />
+                        <InputText class="form-control form-control-lg" placeholder="Your Name" @bind-Value="validationModel.Username" />
                     </fieldset>
                     <fieldset class="form-group">
-                        <InputText class="form-control form-control-lg" placeholder="Email" @bind-Value="validationModel.UserName" />
+                        <InputText class="form-control form-control-lg" placeholder="Email" @bind-Value="validationModel.Email" />
                     </fieldset>
                     <fieldset class="form-group">
                         <InputText class="form-control form-control-lg" placeholder="Password" type="password" @bind-Value="validationModel.Password" />
@@ -52,16 +78,43 @@
 
     private RegisterUserValidationModel validationModel = new RegisterUserValidationModel();
 
+    private EditContext? editContext;
+
+    private bool isValid = true;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        editContext = new EditContext(validationModel);
+
+        State.StateChanged += DisplayValidationErrors;
     }
 
     private void OnSignUpClicked()
     {
-        var registerRequest = new AuthenticationRequestModel(new AuthenticationRequestDto(validationModel.UserName, validationModel.Email!, validationModel.Password!));
+        isValid = (!(editContext is null) && editContext.Validate()) || !State.Value.HasCurrentErrors;
 
-        Dispatcher.Dispatch(new RegisterUserAction(registerRequest));
+        if (isValid)
+        {
+            // The validation model ensures the strings are not null/empty, let the compiler know with the bang (!) operator
+            var userRegisterationDto = new RegisterUserDto(validationModel.Username!, validationModel.Email!, validationModel.Password!);
+            var userRegistrationRequest = new RegisterUserRequest(userRegisterationDto);
+
+            StateFacade.RegisterUser(userRegistrationRequest);
+        }
     }
 
+    private void DisplayValidationErrors(object sender, AppState state)
+    {
+        if (state.HasCurrentErrors)
+        {
+            isValid = false;
+        }
+        else
+        {
+            isValid = true;
+        }
+
+        StateHasChanged();
+    }
 }
