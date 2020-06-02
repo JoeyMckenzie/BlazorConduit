@@ -11,7 +11,7 @@ namespace BlazorConduit.Models.Authentication.Dtos
 
         public string? Token { get; set; }
 
-        public string? UserName { get; set; }
+        public string? Username { get; set; }
 
         public string? Bio { get; set; }
 

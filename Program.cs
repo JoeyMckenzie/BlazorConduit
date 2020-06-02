@@ -30,6 +30,7 @@ namespace BlazorConduit
             builder.Services.TryAddScoped<ConduitApiService>();
             builder.Services.TryAddScoped<StateFacade>();
             builder.Services.TryAddScoped<ErrorFormattingService>();
+            builder.Services.TryAddScoped<SecurityTokenService>();
 
             // Add package services
             builder.Services.AddBlazoredLocalStorage();

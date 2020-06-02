@@ -1,9 +1,12 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
+@using BlazorConduit.Services
 @using BlazorConduit.Store
+@using Blazored.LocalStorage
 @using Fluxor
 
 @inject IState<AppState> State
+@inject SecurityTokenService TokenService
 
 <nav class="navbar navbar-light">
     <div class="container">
@@ -25,10 +28,10 @@
                 </NavLink>
             </li>
             <li class="nav-item">
-                @if (State.Value.IsAuthenticated)
+                @if (State.Value.IsAuthenticated || !string.IsNullOrWhiteSpace(existingUsername))
                 {
                     <NavLink class="nav-link" href="/profile">
-                        @State.Value.CurrentUser!.Email
+                        @existingUsername
                     </NavLink>
                 }
                 else
@@ -44,9 +47,13 @@
 
 @code {        
 
+    private string? existingUsername;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+
+        existingUsername = await TokenService.GetUsernameFromExistingTokenAsync();
     }
 
 }
