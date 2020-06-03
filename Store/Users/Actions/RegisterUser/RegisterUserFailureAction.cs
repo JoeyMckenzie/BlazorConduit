@@ -1,7 +1,7 @@
 ﻿using BlazorConduit.Models.Common.ViewModels;
 using System.Collections.Generic;
 
-namespace BlazorConduit.Store.Users.Actions
+namespace BlazorConduit.Store.Users.Actions.RegisterUser
 {
     public class RegisterUserFailureAction
     {

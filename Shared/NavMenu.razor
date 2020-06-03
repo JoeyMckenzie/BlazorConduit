@@ -2,7 +2,6 @@
 
 @using BlazorConduit.Services
 @using BlazorConduit.Store
-@using Blazored.LocalStorage
 @using Fluxor
 
 @inject IState<AppState> State
@@ -17,30 +16,37 @@
                     Home
                 </NavLink>
             </li>
-            <li class="nav-item">
-                <NavLink class="nav-link" href="/article/create-post">
-                    New Post
-                </NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink class="nav-link" href="/settings">
-                    Settings
-                </NavLink>
-            </li>
-            <li class="nav-item">
-                @if (State.Value.IsAuthenticated || !string.IsNullOrWhiteSpace(existingUsername))
-                {
+            @if (State.Value.IsAuthenticated || !string.IsNullOrWhiteSpace(existingUsername))
+            {
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/article/create-post">
+                        New Post
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/settings">
+                        Settings
+                    </NavLink>
+                </li>
+                <li class="nav-item">
                     <NavLink class="nav-link" href="/profile">
                         @existingUsername
                     </NavLink>
-                }
-                else
-                {
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/login">
+                        Sign In
+                    </NavLink>
+                </li>
+                <li class="nav-item">
                     <NavLink class="nav-link" href="/register">
                         Sign Up
                     </NavLink>
-                }
-            </li>
+                </li>
+            }
         </ul>
     </div>
 </nav>
@@ -54,6 +60,16 @@
         await base.OnInitializedAsync();
 
         existingUsername = await TokenService.GetUsernameFromExistingTokenAsync();
+
+        // On successful register or login, re-render the nav bar to display the username
+        State.StateChanged += GetUsernameOnLoginOrRegistration;
+    }
+
+    private void GetUsernameOnLoginOrRegistration(object sender, AppState state)
+    {
+        existingUsername = State.Value.CurrentUser?.Username;
+
+        StateHasChanged();
     }
 
 }

@@ -44,6 +44,7 @@
                             @* Display any errors returned from the API response *@
                             @if (State.Value.HasCurrentErrors)
                             {
+                                @* Let the compiler know we have current errors since it is a nullable field, and already null checked with HasCurrentErrors *@
                                 @foreach (var error in State.Value.CurrentErrors!)
                                 {
                                     <li>@error</li>
@@ -82,12 +83,15 @@
         await base.OnInitializedAsync();
         editContext = new EditContext(validationModel);
 
+        // Manually re-render the page on state change as errors display based on 
+        // form validation and API errors returned from the request as well
         State.StateChanged += DisplayValidationErrors;
     }
 
     private void OnSignInClicked()
     {
-        isValid = (!(editContext is null) && editContext.Validate()) || !State.Value.HasCurrentErrors;
+        // Do not allow the user to login if the form is invalid
+        isValid = !(editContext is null) && editContext.Validate();
 
         if (isValid)
         {
@@ -95,7 +99,7 @@
             var userLoginDto = new LoginUserDto(validationModel.Email!, validationModel.Password!);
             var userLoginRequest = new LoginUserRequest(userLoginDto);
 
-            StateFacade.RegisterUser(userLoginRequest);
+            StateFacade.LoginUser(userLoginRequest);
         }
     }
 

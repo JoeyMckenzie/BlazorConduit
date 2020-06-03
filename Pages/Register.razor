@@ -92,7 +92,8 @@
 
     private void OnSignUpClicked()
     {
-        isValid = (!(editContext is null) && editContext.Validate()) || !State.Value.HasCurrentErrors;
+        // Do not allow the user to attempt to register if the form is invalid
+        isValid = !(editContext is null) && editContext.Validate();
 
         if (isValid)
         {

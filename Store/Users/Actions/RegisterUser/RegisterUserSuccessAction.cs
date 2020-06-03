@@ -1,6 +1,6 @@
 ﻿using BlazorConduit.Models.Authentication.Dtos;
 
-namespace BlazorConduit.Store.Users.Actions
+namespace BlazorConduit.Store.Users.Actions.RegisterUser
 {
     public class RegisterUserSuccessAction
     {

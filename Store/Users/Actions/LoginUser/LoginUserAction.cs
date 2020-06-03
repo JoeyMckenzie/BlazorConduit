@@ -1,12 +1,12 @@
 ﻿using BlazorConduit.Models.Authentication.Requests;
 
-namespace BlazorConduit.Store.Users.Actions
+namespace BlazorConduit.Store.Users.Actions.LoginUser
 {
-    public class RegisterUserAction
+    public class LoginUserAction
     {
-        public RegisterUserAction(LoginUserRequest requestModel) =>
+        public LoginUserAction(LoginUserRequest requestModel) =>
             RequestModel = requestModel;
-        
+
         public LoginUserRequest RequestModel { get; }
     }
 }

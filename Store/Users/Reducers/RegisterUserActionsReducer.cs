@@ -1,4 +1,4 @@
-﻿using BlazorConduit.Store.Users.Actions;
+﻿using BlazorConduit.Store.Users.Actions.RegisterUser;
 using Fluxor;
 
 namespace BlazorConduit.Store.Users.Reducers

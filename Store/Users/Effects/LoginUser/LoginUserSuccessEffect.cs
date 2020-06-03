@@ -1,4 +1,4 @@
-﻿using BlazorConduit.Store.Users.Actions;
+﻿using BlazorConduit.Store.Users.Actions.LoginUser;
 using Blazored.LocalStorage;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace BlazorConduit.Store.Users.Effects
 {
-    public class RegisterUserSuccessEffect : Effect<RegisterUserSuccessAction>
+    public class LoginUserSuccessEffect : Effect<LoginUserSuccessAction>
     {
         private readonly ILocalStorageService _storageService;
-        private readonly ILogger<RegisterUserSuccessEffect> _logger;
+        private readonly ILogger<LoginUserSuccessEffect> _logger;
         private readonly NavigationManager _navigation;
 
-        public RegisterUserSuccessEffect(
+        public LoginUserSuccessEffect(
             ILocalStorageService storageService,
-            ILogger<RegisterUserSuccessEffect> logger,
+            ILogger<LoginUserSuccessEffect> logger,
             NavigationManager navigation)
         {
             _storageService = storageService;
@@ -23,10 +23,10 @@ namespace BlazorConduit.Store.Users.Effects
             _navigation = navigation;
         }
 
-        protected override async Task HandleAsync(RegisterUserSuccessAction action, IDispatcher dispatcher)
+        protected override async Task HandleAsync(LoginUserSuccessAction action, IDispatcher dispatcher)
         {
             // Cache the access token in local storage, overrides if already existing
-            _logger.LogInformation($"Caching access token for user {action.User.Email}");
+            _logger.LogInformation($"Caching access token on successful user login for user {action.User.Email}");
             await _storageService.SetItemAsync("token", action.User.Token);
 
             // Navigate back to the home page
