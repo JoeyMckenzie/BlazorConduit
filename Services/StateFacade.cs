@@ -1,6 +1,8 @@
 ﻿using BlazorConduit.Models.Authentication.Requests;
+using BlazorConduit.Store.Users.Actions.GetCurrentUser;
 using BlazorConduit.Store.Users.Actions.LoginUser;
 using BlazorConduit.Store.Users.Actions.RegisterUser;
+using BlazorConduit.Store.Users.Actions.UpdateUser;
 using Fluxor;
 using Microsoft.Extensions.Logging;
 
@@ -27,6 +29,18 @@ namespace BlazorConduit.Services
         {
             _logger.LogInformation($"Dispatching user login request for user email {request.User.Email}");
             _dispatcher.Dispatch(new LoginUserAction(request));
+        }
+
+        public void UpdateUser(UpdateUserRequest request)
+        {
+            _logger.LogInformation($"Dispatching user update request for user email {request.User?.Email}");
+            _dispatcher.Dispatch(new UpdateUserAction(request));
+        }
+
+        public void GetCurrentUser(string? token = null)
+        {
+            _logger.LogInformation($"Retrieving current user from cached token");
+            _dispatcher.Dispatch(new GetCurrentUserAction(token));
         }
     }
 }

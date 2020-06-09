@@ -1,4 +1,16 @@
-﻿@page "/settings"
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@page "/settings"
+
+@using BlazorConduit.Models.Authentication.Dtos
+@using BlazorConduit.Models.Authentication.Requests
+@using BlazorConduit.Store
+@using BlazorConduit.Services
+@using Fluxor 
+
+@inject IState<AppState> State
+@inject StateFacade StateFacade
+@inject SecurityTokenService TokenService
 
 <div class="settings-page">
     <div class="container page">
@@ -7,30 +19,75 @@
             <div class="col-md-6 offset-md-3 col-xs-12">
                 <h1 class="text-xs-center">Your Settings</h1>
 
-                <form>
-                    <fieldset>
-                        <fieldset class="form-group">
-                            <input class="form-control" type="text" placeholder="URL of profile picture">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="text" placeholder="Your Name">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <textarea class="form-control form-control-lg" rows="8" placeholder="Short bio about you"></textarea>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="text" placeholder="Email">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input class="form-control form-control-lg" type="password" placeholder="Password">
-                        </fieldset>
-                        <button class="btn btn-lg btn-primary pull-xs-right">
-                            Update Settings
-                        </button>
+                <EditForm Model="@updatedUser" OnSubmit="OnUpdateSettingsClicked">
+                    @* Although we're not validating any fields, need the validator component to bind model values *@
+                    <DataAnnotationsValidator />
+
+                    <fieldset class="form-group">
+                        <InputText @bind-Value="updatedUser.Image" class="form-control" placeholder="URL of profile picture"/>
                     </fieldset>
-                </form>
+                    <fieldset class="form-group">
+                        <InputText @bind-Value="updatedUser.Username" class="form-control form-control-lg" placeholder="Your Name"/>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <InputTextArea @bind-Value="updatedUser.Bio" class="form-control form-control-lg" rows="8" placeholder="Short bio about you"/>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <InputText @bind-Value="updatedUser.Email" class="form-control form-control-lg" placeholder="Email"/>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <InputText @bind-Value="updatedUser.Password" class="form-control form-control-lg" placeholder="Password"/>
+                    </fieldset>
+                    <button type="submit" class="btn btn-lg btn-primary pull-xs-right">
+                        Update Settings
+                    </button>
+                </EditForm>
             </div>
 
         </div>
     </div>
-</div>S
+</div>
+
+@code {
+
+    private ConduitUserDto updatedUser = new ConduitUserDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        // Listen for the current user being set from the cached token
+        State.StateChanged += OnCurrentUserAssigned;
+
+        if (State.Value.IsAuthenticated)
+        {
+            AssignCurrentUser(State.Value.CurrentUser!);
+        }
+    }
+
+    private void OnUpdateSettingsClicked()
+    {
+        var updateUserRequest = new UpdateUserRequest(updatedUser);
+
+        StateFacade.UpdateUser(updateUserRequest);
+    }
+
+    private void OnCurrentUserAssigned(object sender, AppState state)
+    {
+        if (state.IsAuthenticated && !state.IsLoading)
+        {
+            AssignCurrentUser(state.CurrentUser!);
+        }
+    }
+
+    private void AssignCurrentUser(ConduitUserDto currentUser)
+    {
+        updatedUser.Bio = currentUser.Bio;
+        updatedUser.Email = currentUser.Email;
+        updatedUser.Image = currentUser.Image;
+        updatedUser.Username = currentUser.Username;
+
+        StateHasChanged();
+    }
+
+}

@@ -1,5 +1,12 @@
 ﻿@page "/profile"
 
+@using BlazorConduit.Services
+@using BlazorConduit.Store
+@using Fluxor 
+
+@inject IState<AppState> State
+@inject StateFacade State
+
 <div class="profile-page">
 
     <div class="user-info">
@@ -77,11 +84,7 @@
                         </ul>
                     </a>
                 </div>
-
-
             </div>
-
         </div>
     </div>
-
 </div>

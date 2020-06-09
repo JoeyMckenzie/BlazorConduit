@@ -34,7 +34,7 @@ namespace BlazorConduit
 
             // Add package services
             builder.Services.AddBlazoredLocalStorage();
-            builder.Services.AddFluxor(options => 
+            builder.Services.AddFluxor(options =>
             {
                 options.ScanAssemblies(Assembly.GetExecutingAssembly());
                 options.UseReduxDevTools();

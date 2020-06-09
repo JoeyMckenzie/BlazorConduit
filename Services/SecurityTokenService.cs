@@ -1,4 +1,6 @@
-﻿using Blazored.LocalStorage;
+﻿using BlazorConduit.Store;
+using Blazored.LocalStorage;
+using Fluxor;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -9,9 +11,10 @@ namespace BlazorConduit.Services
     public class SecurityTokenService
     {
         private readonly ILocalStorageService _storageService;
+        private readonly IState<AppState> _state;
 
-        public SecurityTokenService(ILocalStorageService storageService) =>
-            _storageService = storageService;
+        public SecurityTokenService(ILocalStorageService storageService, IState<AppState> state) =>
+            (_storageService, _state) = (storageService, state);
 
         public Task SetTokenAsync(string token)
         {
@@ -20,6 +23,12 @@ namespace BlazorConduit.Services
 
         public Task<string?> GetTokenAsync()
         {
+            // If the token exists in the current user state value, return it
+            if (_state.Value.IsAuthenticated)
+            {
+                return Task.FromResult(_state.Value.CurrentUser!.Token);
+            }
+
             return _storageService.GetItemAsync<string?>("token");
         }
 

@@ -25,7 +25,7 @@ namespace BlazorConduit.Store.Users.Effects.RegisterUser
             try
             {
                 // Call the register user endpoint with the constructed payload
-                var registerResponse = await _apiService.RegisterUser(action.RequestModel);
+                var registerResponse = await _apiService.PostAsync("users", action.RequestModel);
 
                 if (!registerResponse.IsSuccessStatusCode)
                 {

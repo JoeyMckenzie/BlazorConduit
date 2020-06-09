@@ -6,6 +6,8 @@
 
 @inject IState<AppState> State
 @inject SecurityTokenService TokenService
+@inject NavigationManager Navigation
+@inject StateFacade StateFacade
 
 <nav class="navbar navbar-light">
     <div class="container">
@@ -63,6 +65,25 @@
 
         // On successful register or login, re-render the nav bar to display the username
         State.StateChanged += GetUsernameOnLoginOrRegistration;
+
+        if (string.IsNullOrWhiteSpace(existingUsername))
+        {
+            // Attempt to retrieve the current user if the token is available
+            var currentToken = await TokenService.GetTokenAsync();
+
+            if (string.IsNullOrWhiteSpace(currentToken))
+            {
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                StateFacade.GetCurrentUser(currentToken);
+            }
+        }
+        else if (!State.Value.IsAuthenticated)
+        {
+            StateFacade.GetCurrentUser(await TokenService.GetTokenAsync());
+        }
     }
 
     private void GetUsernameOnLoginOrRegistration(object sender, AppState state)

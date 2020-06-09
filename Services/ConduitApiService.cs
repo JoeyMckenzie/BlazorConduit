@@ -1,5 +1,5 @@
-﻿using BlazorConduit.Models.Authentication.Requests;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
@@ -12,14 +12,40 @@ namespace BlazorConduit.Services
         public ConduitApiService(HttpClient httpClient) =>
             _httpClient = httpClient;
 
-        public Task<HttpResponseMessage> RegisterUser(RegisterUserRequest request)
+        public Task<TResponse> GetAsync<TResponse>(string path, string? token = null)
+            where TResponse : class
         {
-            return _httpClient.PostAsJsonAsync("users", request);
+            AttachDefaultAuthenticationHeader(token);
+            return _httpClient.GetFromJsonAsync<TResponse>(path);
         }
 
-        public Task<HttpResponseMessage> LoginUser(LoginUserRequest request)
+        public Task<HttpResponseMessage> PostAsync<TBody>(string path, TBody body, string? token = null)
+            where TBody : class
         {
-            return _httpClient.PostAsJsonAsync("users/login", request);
+            AttachDefaultAuthenticationHeader(token);
+            return _httpClient.PostAsJsonAsync(path, body);
+        }
+
+        public Task<HttpResponseMessage> PutAsync<TBody>(string path, TBody body, string? token = null)
+            where TBody : class
+        {
+            AttachDefaultAuthenticationHeader(token);
+            return _httpClient.PutAsJsonAsync(path, body);
+        }
+
+        private void AttachDefaultAuthenticationHeader(string? token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                if (_httpClient.DefaultRequestHeaders.Contains("Authorization"))
+                {
+                    _httpClient.DefaultRequestHeaders.Remove("Authorization");
+                }
+
+                return;
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
         }
     }
 }

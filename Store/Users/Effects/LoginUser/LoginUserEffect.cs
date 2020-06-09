@@ -25,7 +25,7 @@ namespace BlazorConduit.Store.Users.Effects.LoginUser
             try
             {
                 // Call the register user endpoint with the constructed payload
-                var loginResponse = await _apiService.LoginUser(action.RequestModel);
+                var loginResponse = await _apiService.PostAsync("users/login", action.RequestModel);
 
                 if (!loginResponse.IsSuccessStatusCode)
                 {
