@@ -1,5 +1,6 @@
 ﻿using BlazorConduit.Models.Authentication.Requests;
 using BlazorConduit.Store.Users.Actions.GetCurrentUser;
+using BlazorConduit.Store.Users.Actions.LoadUserProfile;
 using BlazorConduit.Store.Users.Actions.LoginUser;
 using BlazorConduit.Store.Users.Actions.RegisterUser;
 using BlazorConduit.Store.Users.Actions.UpdateUser;
@@ -41,6 +42,15 @@ namespace BlazorConduit.Services
         {
             _logger.LogInformation($"Retrieving current user from cached token");
             _dispatcher.Dispatch(new GetCurrentUserAction(token));
+        }
+
+        /**
+         * Profile actions
+         */
+        public void GetUserProfile(string username)
+        {
+            _logger.LogInformation($"Loading user profile for {username}");
+            _dispatcher.Dispatch(new LoadUserProfileAction(username));
         }
     }
 }

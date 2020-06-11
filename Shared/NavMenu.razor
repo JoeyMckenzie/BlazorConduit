@@ -30,8 +30,8 @@
                         Settings
                     </NavLink>
                 </li>
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="/profile">
+                <li style="cursor: pointer;" class="nav-item">
+                    <NavLink class="nav-link" @onclick="LoadCurrentUserProfile">
                         @existingUsername
                     </NavLink>
                 </li>
@@ -91,6 +91,16 @@
         existingUsername = State.Value.CurrentUser?.Username;
 
         StateHasChanged();
+    }
+
+    private void LoadCurrentUserProfile()
+    {
+        if (string.IsNullOrWhiteSpace(existingUsername))
+        {
+            return;
+        }
+
+        StateFacade.GetUserProfile(existingUsername);
     }
 
 }

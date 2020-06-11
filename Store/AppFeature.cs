@@ -6,6 +6,6 @@ namespace BlazorConduit.Store
     {
         public override string GetName() => "App";
 
-        protected override AppState GetInitialState() => new AppState(false, null, null);
+        protected override AppState GetInitialState() => new AppState(false, null, null, null);
     }
 }
