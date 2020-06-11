@@ -17,7 +17,7 @@ namespace BlazorConduit.Store.Users.Effects.LoadUserProfile
         protected override Task HandleAsync(LoadUserProfileSuccessAction action, IDispatcher dispatcher)
         {
             _logger.LogInformation($"Navigating to user profile {action.Profile.Username}");
-            _navigation.NavigateTo("/profile");
+            _navigation.NavigateTo($"/profile/{action.Profile.Username}");
 
             return Task.CompletedTask;
         }

@@ -1,11 +1,13 @@
-﻿@page "/profile"
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@page "/profile/{username}"
 
 @using BlazorConduit.Services
 @using BlazorConduit.Store
 @using Fluxor 
 
 @inject IState<AppState> State
-@inject StateFacade State
+@inject StateFacade StateFacade
 
 <div class="profile-page">
 
@@ -88,3 +90,21 @@
         </div>
     </div>
 </div>
+
+@code {        
+
+    [Parameter]
+    public string? Username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        // Load the current profile if none is available and a username was passed in (i.e. user refreshed)
+        if (!string.IsNullOrWhiteSpace(Username) && State.Value.CurrentProfile is null)
+        {
+            StateFacade.GetUserProfile(Username);
+        }
+    }
+
+}

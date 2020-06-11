@@ -6,10 +6,11 @@ namespace BlazorConduit.Store.Users.Reducers
     public static class LoadUserProfileActionsReducer
     {
         [ReducerMethod]
-        public static AppState ReduceLoadUserProfileAction(AppState state, LoadUserProfileAction action) =>
-            new AppState(true, state.CurrentUser, null, null);
+        public static AppState ReduceLoadUserProfileAction(AppState state, LoadUserProfileAction _) =>
+            new AppState(true, state.CurrentUser, null, state.CurrentProfile);
 
+        [ReducerMethod]
         public static AppState ReduceLoadUserProfileSuccessAction(AppState state, LoadUserProfileSuccessAction action) =>
-            new AppState(false, state.CurrentUser, null, action.Profile);
+            new AppState(false, state.CurrentUser, null, action.LoadMemoryCachedProfile ? state.CurrentProfile : action.Profile);
     }
 }

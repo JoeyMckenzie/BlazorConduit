@@ -14,12 +14,20 @@ namespace BlazorConduit.Store.Users.Effects.LoadUserProfile
     {
         private readonly ConduitApiService _apiService;
         private readonly ILogger<LoadUserProfileEffect> _logger;
+        private readonly IState<AppState> _state;
 
-        public LoadUserProfileEffect(ConduitApiService apiService, ILogger<LoadUserProfileEffect> logger) =>
-            (_apiService, _logger) = (apiService, logger);
+        public LoadUserProfileEffect(ConduitApiService apiService, ILogger<LoadUserProfileEffect> logger, IState<AppState> state) =>
+            (_apiService, _logger, _state) = (apiService, logger, state);
 
         protected override async Task HandleAsync(LoadUserProfileAction action, IDispatcher dispatcher)
         {
+            // If the current profile is loaded in the store, return it
+            if (!(_state.Value.CurrentProfile is null) && string.Equals(_state.Value.CurrentProfile.Username, action.Username, StringComparison.CurrentCulture))
+            {
+                dispatcher.Dispatch(new LoadUserProfileSuccessAction(_state.Value.CurrentProfile, true));
+                return;
+            }
+
             try
             {
                 // Call the profile user endpoint with the username
