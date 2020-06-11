@@ -1,4 +1,5 @@
 ﻿using BlazorConduit.Store.Features.Users.Actions.LoginUser;
+using BlazorConduit.Store.State;
 using Fluxor;
 
 namespace BlazorConduit.Store.Features.Users.Reducers

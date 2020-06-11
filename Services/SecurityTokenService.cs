@@ -1,4 +1,4 @@
-﻿using BlazorConduit.Store;
+﻿using BlazorConduit.Store.State;
 using Blazored.LocalStorage;
 using Fluxor;
 using System;

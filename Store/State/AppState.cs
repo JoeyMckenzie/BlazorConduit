@@ -1,14 +1,9 @@
 ﻿using BlazorConduit.Models.Authentication.Dtos;
-using BlazorConduit.Models.Authentication.ViewModels;
-using BlazorConduit.Models.Common.ViewModels;
 using BlazorConduit.Models.Profile;
-using Fluxor;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace BlazorConduit.Store
+namespace BlazorConduit.Store.State
 {
     public class AppState
     {
@@ -26,5 +21,8 @@ namespace BlazorConduit.Store
         public bool HasCurrentErrors => !(CurrentErrors is null) && CurrentErrors.Any();
 
         public bool IsAuthenticated => !(CurrentUser is null);
+
+        public static AppState FromInitialState() =>
+            new AppState(false, null, null, null);
     }
 }

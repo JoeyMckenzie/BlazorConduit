@@ -1,4 +1,5 @@
 ﻿using BlazorConduit.Store.Features.Profiles.Actions.LoadUserProfile;
+using BlazorConduit.Store.State;
 using Fluxor;
 
 namespace BlazorConduit.Store.Features.Profiles.Reducers
