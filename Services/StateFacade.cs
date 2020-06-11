@@ -1,11 +1,11 @@
 ﻿using BlazorConduit.Models.Authentication.Requests;
-using BlazorConduit.Store.Users.Actions.GetCurrentUser;
-using BlazorConduit.Store.Users.Actions.LoadUserProfile;
-using BlazorConduit.Store.Users.Actions.LoginUser;
-using BlazorConduit.Store.Users.Actions.RegisterUser;
-using BlazorConduit.Store.Users.Actions.UpdateUser;
 using Fluxor;
 using Microsoft.Extensions.Logging;
+using BlazorConduit.Store.Features.Profiles.Actions.LoadUserProfile;
+using BlazorConduit.Store.Features.Users.Actions.GetCurrentUser;
+using BlazorConduit.Store.Features.Users.Actions.LoginUser;
+using BlazorConduit.Store.Features.Users.Actions.RegisterUser;
+using BlazorConduit.Store.Features.Users.Actions.UpdateUser;
 
 namespace BlazorConduit.Services
 {
