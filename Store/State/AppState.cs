@@ -7,16 +7,14 @@ namespace BlazorConduit.Store.State
 {
     public class AppState
     {
-        public AppState(bool isLoading, ConduitUserDto? currentUser, IEnumerable<string>? currentErrors, UserProfileDto? currentProfile) =>
-            (IsLoading, CurrentUser, CurrentErrors, CurrentProfile) = (isLoading, currentUser, currentErrors, currentProfile);
+        public AppState(bool isLoading, ConduitUserDto? currentUser, IEnumerable<string>? currentErrors, UserProfileDtcurrentProfile) =>
+            (IsLoading, CurrentUser, CurrentErrors) = (isLoading, currentUser, currentErrors, currentProfile);
 
         public bool IsLoading { get; }
 
         public ConduitUserDto? CurrentUser { get; }
 
         public IEnumerable<string>? CurrentErrors { get; }
-
-        public UserProfileDto? CurrentProfile { get; }
 
         public bool HasCurrentErrors => !(CurrentErrors is null) && CurrentErrors.Any();
 
