@@ -1,0 +1,106 @@
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@using BlazorConduit.Client.Services
+@using BlazorConduit.Client.Store.State
+@using Fluxor
+
+@inject IState<UserState> State
+@inject SecurityTokenService TokenService
+@inject NavigationManager Navigation
+@inject StateFacade StateFacade
+
+<nav class="navbar navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/#/">conduit</a>
+        <ul class="nav navbar-nav pull-xs-right">
+            <li class="nav-item">
+                <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                    Home
+                </NavLink>
+            </li>
+            @if (State.Value.IsAuthenticated || !string.IsNullOrWhiteSpace(existingUsername))
+            {
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/article/create-post">
+                        New Post
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/settings">
+                        Settings
+                    </NavLink>
+                </li>
+                <li style="cursor: pointer;" class="nav-item">
+                    <NavLink class="nav-link" @onclick="LoadCurrentUserProfile">
+                        @existingUsername
+                    </NavLink>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/login">
+                        Sign In
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/register">
+                        Sign Up
+                    </NavLink>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>
+
+@code {        
+
+    private string? existingUsername;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        existingUsername = await TokenService.GetUsernameFromExistingTokenAsync();
+
+        // On successful register or login, re-render the nav bar to display the username
+        State.StateChanged += GetUsernameOnLoginOrRegistration;
+
+        if (string.IsNullOrWhiteSpace(existingUsername))
+        {
+            // Attempt to retrieve the current user if the token is available
+            var currentToken = await TokenService.GetTokenAsync();
+
+            if (string.IsNullOrWhiteSpace(currentToken))
+            {
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                StateFacade.GetCurrentUser(currentToken);
+            }
+        }
+        else if (!State.Value.IsAuthenticated)
+        {
+            StateFacade.GetCurrentUser(await TokenService.GetTokenAsync());
+        }
+    }
+
+    private void GetUsernameOnLoginOrRegistration(object sender, UserState state)
+    {
+        existingUsername = State.Value.CurrentUser?.Username;
+
+        StateHasChanged();
+    }
+
+    private void LoadCurrentUserProfile()
+    {
+        if (string.IsNullOrWhiteSpace(existingUsername))
+        {
+            return;
+        }
+
+        StateFacade.GetUserProfile(existingUsername);
+    }
+
+}
