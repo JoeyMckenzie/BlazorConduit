@@ -11,7 +11,7 @@ namespace BlazorConduit.Store.Features.Profiles.Reducers
             new ProfileState(true, null, null);
 
         [ReducerMethod]
-        public static ProfileState ReduceLoadUserProfileSuccessAction(ProfileState state, LoadUserProfileSuccessAction action) =>
-            new ProfileState(false, null, action.LoadMemoryCachedProfile ? state.CurrentProfile : action.Profile);
+        public static ProfileState ReduceLoadUserProfileSuccessAction(ProfileState _, LoadUserProfileSuccessAction action) =>
+            new ProfileState(false, null, action.Profile);
     }
 }

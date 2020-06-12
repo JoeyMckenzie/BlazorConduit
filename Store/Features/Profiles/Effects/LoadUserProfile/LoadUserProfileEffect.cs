@@ -22,13 +22,6 @@ namespace BlazorConduit.Store.Features.Profiles.Effects.LoadUserProfile
 
         protected override async Task HandleAsync(LoadUserProfileAction action, IDispatcher dispatcher)
         {
-            // If the current profile is loaded in the store, return it
-            if (!(_state.Value.CurrentProfile is null) && string.Equals(_state.Value.CurrentProfile.Username, action.Username, StringComparison.CurrentCulture))
-            {
-                dispatcher.Dispatch(new LoadUserProfileSuccessAction(_state.Value.CurrentProfile, true));
-                return;
-            }
-
             try
             {
                 // Call the profile user endpoint with the username
