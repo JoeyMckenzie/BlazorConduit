@@ -1,5 +1,5 @@
 ﻿using BlazorConduit.Client.Models.Common;
-using BlazorConduit.Client.Models.Profile;
+using BlazorConduit.Client.Models.Profiles;
 using BlazorConduit.Client.Services;
 using BlazorConduit.Client.Store.Features.Profiles.Actions.LoadUserProfile;
 using Fluxor;

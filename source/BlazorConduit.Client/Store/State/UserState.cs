@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BlazorConduit.Client.Store.State
 {
-    public class UserState : RootState<UserState>
+    public class UserState : RootState
     {
         public UserState(bool isLoading, IEnumerable<string>? errors, ConduitUserDto? currentUser)
             : base(isLoading, errors)

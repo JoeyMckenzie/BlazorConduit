@@ -1,11 +1,52 @@
-﻿@page "/article/create-post"
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@page "/article/create-post"
+
+@using BlazorConduit.Client.Models.Articles.Validation 
+@using BlazorConduit.Client.Services 
+@using BlazorConduit.Client.Store.State
+@using Fluxor
+
+@inject StateFacade StateFacade
+@inject IState<ArticleState> State
 
 <div class="editor-page">
     <div class="container page">
         <div class="row">
 
             <div class="col-md-10 offset-md-1 col-xs-12">
-                <form>
+                <EditForm EditContext="editContext">
+                    <DataAnnotationsValidator />
+
+                    @*
+                        Bit of a hack, but alas, my StackOverflow skills were overcome when searching on how
+                        override the custom CSS for the <ValidationSummary /> component. This does the job for now.
+                    *@
+                    @if (!isValid)
+                    {
+                        <ul class="error-messages">
+                            @* Display any validation errors *@
+                            @if (!(editContext is null))
+                            {
+                                @foreach (var errorMessage in editContext.GetValidationMessages())
+                                {
+                                    <li>@errorMessage</li>
+                                }
+                            }
+
+                            @* Display any errors returned from the API response *@
+                            @if (State.Value.HasCurrentErrors)
+                            {
+                                @* Let the compiler know we have current errors since it is a nullable field, and already null checked with HasCurrentErrors *@
+                                @foreach (var error in State.Value.CurrentErrors!)
+                                {
+                                    <li>@error</li>
+
+                                }
+                            }
+                        </ul>
+                    }
+
                     <fieldset>
                         <fieldset class="form-group">
                             <input type="text" class="form-control form-control-lg" placeholder="Article Title">
@@ -23,9 +64,26 @@
                             Publish Article
                         </button>
                     </fieldset>
-                </form>
+                </EditForm>
             </div>
 
         </div>
     </div>
 </div>
+
+@code {
+
+    private CreateArticleValidationModel validationModel = new CreateArticleValidationModel();
+
+    private EditContext? editContext;
+
+    private bool isValid = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        editContext = new EditContext(validationModel);
+    }
+
+}

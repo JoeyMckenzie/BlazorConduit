@@ -1,4 +1,4 @@
-﻿using BlazorConduit.Client.Models.Profile;
+﻿using BlazorConduit.Client.Models.Profiles;
 
 namespace BlazorConduit.Client.Store.Features.Profiles.Actions.LoadUserProfile
 {

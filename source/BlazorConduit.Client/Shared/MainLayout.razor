@@ -1,4 +1,4 @@
-﻿@inherits LayoutComponentBase
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorLayout
 
 <NavMenu />
 
@@ -7,3 +7,12 @@
 </section>
 
 <Footer />
+
+@code {        
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+}

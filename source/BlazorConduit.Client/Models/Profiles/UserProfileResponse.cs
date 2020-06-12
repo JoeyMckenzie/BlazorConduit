@@ -1,4 +1,6 @@
-﻿namespace BlazorConduit.Client.Models.Profile
+﻿using BlazorConduit.Client.Models.Profiles;
+
+namespace BlazorConduit.Client.Models.Profiles
 {
     public class UserProfileResponse
     {

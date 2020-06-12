@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using BlazorConduit.Client.Models.Profile;
+using BlazorConduit.Client.Models.Profiles;
 
 namespace BlazorConduit.Client.Store.State
 {
-    public class ProfileState : RootState<ProfileState>
+    public class ProfileState : RootState
     {
         public ProfileState(bool isLoading, IEnumerable<string>? currentErrors, UserProfileDto? currentProfile)
             : base(isLoading, currentErrors)

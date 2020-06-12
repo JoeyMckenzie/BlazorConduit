@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace BlazorConduit.Client.Store.State
 {
-    public abstract class RootState<TState>
+    public abstract class RootState
     {
         public RootState(bool isLoading = false, IEnumerable<string>? errors = null) =>
             (IsLoading, CurrentErrors) = (isLoading, errors);
