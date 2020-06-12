@@ -26,6 +26,12 @@ namespace BlazorConduit.Services
             return _httpClient.PostAsJsonAsync(path, body);
         }
 
+        public Task<HttpResponseMessage> PostNoContentAsync(string path, string? token)
+        {
+            AttachDefaultAuthenticationHeader(token);
+            return _httpClient.PostAsync(path, default);
+        }
+
         public Task<HttpResponseMessage> PutAsync<TBody>(string path, TBody body, string? token = null)
             where TBody : class
         {

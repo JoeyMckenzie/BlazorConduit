@@ -1,15 +1,13 @@
-﻿using BlazorConduit.Models.Common.ViewModels;
+﻿using BlazorConduit.Store.Features.Shared.Actions;
 using System.Collections.Generic;
 
 namespace BlazorConduit.Store.Features.Users.Actions.RegisterUser
 {
-    public class RegisterUserFailureAction
+    public class RegisterUserFailureAction : FailureAction
     {
-        public RegisterUserFailureAction(string reasonForFailure, IEnumerable<string>? errors = null) =>
-            (ReasonForFailure, Errors) = (reasonForFailure, errors);
-
-        public string ReasonForFailure { get; }
-
-        public IEnumerable<string>? Errors { get; }
+        public RegisterUserFailureAction(string reasonForFailure, IEnumerable<string>? errors = null)
+            : base(reasonForFailure, errors)
+        {
+        }
     }
 }
