@@ -11,9 +11,9 @@ namespace BlazorConduit.Services
     public class SecurityTokenService
     {
         private readonly ILocalStorageService _storageService;
-        private readonly IState<AppState> _state;
+        private readonly IState<UserState> _state;
 
-        public SecurityTokenService(ILocalStorageService storageService, IState<AppState> state) =>
+        public SecurityTokenService(ILocalStorageService storageService, IState<UserState> state) =>
             (_storageService, _state) = (storageService, state);
 
         public Task SetTokenAsync(string token)

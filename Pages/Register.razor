@@ -6,10 +6,10 @@
 @using BlazorConduit.Models.Authentication.Requests
 @using BlazorConduit.Models.Authentication.Validation
 @using BlazorConduit.Services
-@using BlazorConduit.Store
+@using BlazorConduit.Store.State
 @using Fluxor
 
-@inject IState<AppState> State
+@inject IState<UserState> State
 @inject StateFacade StateFacade
 
 <div class="auth-page">
@@ -105,7 +105,7 @@
         }
     }
 
-    private void DisplayValidationErrors(object sender, AppState state)
+    private void DisplayValidationErrors(object sender, UserState state)
     {
         if (state.HasCurrentErrors)
         {

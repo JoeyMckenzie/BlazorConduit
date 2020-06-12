@@ -15,9 +15,9 @@ namespace BlazorConduit.Store.Features.Profiles.Effects.LoadUserProfile
     {
         private readonly ConduitApiService _apiService;
         private readonly ILogger<LoadUserProfileEffect> _logger;
-        private readonly IState<AppState> _state;
+        private readonly IState<ProfileState> _state;
 
-        public LoadUserProfileEffect(ConduitApiService apiService, ILogger<LoadUserProfileEffect> logger, IState<AppState> state) =>
+        public LoadUserProfileEffect(ConduitApiService apiService, ILogger<LoadUserProfileEffect> logger, IState<ProfileState> state) =>
             (_apiService, _logger, _state) = (apiService, logger, state);
 
         protected override async Task HandleAsync(LoadUserProfileAction action, IDispatcher dispatcher)

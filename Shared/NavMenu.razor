@@ -1,10 +1,10 @@
 ﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 @using BlazorConduit.Services
-@using BlazorConduit.Store
+@using BlazorConduit.Store.State
 @using Fluxor
 
-@inject IState<AppState> State
+@inject IState<UserState> State
 @inject SecurityTokenService TokenService
 @inject NavigationManager Navigation
 @inject StateFacade StateFacade
@@ -86,7 +86,7 @@
         }
     }
 
-    private void GetUsernameOnLoginOrRegistration(object sender, AppState state)
+    private void GetUsernameOnLoginOrRegistration(object sender, UserState state)
     {
         existingUsername = State.Value.CurrentUser?.Username;
 

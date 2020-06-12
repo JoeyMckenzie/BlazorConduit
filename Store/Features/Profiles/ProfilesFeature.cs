@@ -7,6 +7,7 @@ namespace BlazorConduit.Store.Features.Profiles
     {
         public override string GetName() => "Profiles";
 
-        protected override ProfileState GetInitialState() => new ProfileState();
+        protected override ProfileState GetInitialState() => 
+            new ProfileState(false, null, null);
     }
 }

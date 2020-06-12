@@ -3,10 +3,10 @@ using Fluxor;
 
 namespace BlazorConduit.Store.Features.Users
 {
-    public class UsersFeature : Feature<AppState>
+    public class UsersFeature : Feature<UserState>
     {
         public override string GetName() => "Users";
 
-        protected override AppState GetInitialState() => AppState.FromInitialState();
+        protected override UserState GetInitialState() => UserState.FromInitialState();
     }
 }

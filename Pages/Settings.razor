@@ -4,11 +4,11 @@
 
 @using BlazorConduit.Models.Authentication.Dtos
 @using BlazorConduit.Models.Authentication.Requests
-@using BlazorConduit.Store
 @using BlazorConduit.Services
+@using BlazorConduit.Store.State
 @using Fluxor 
 
-@inject IState<AppState> State
+@inject IState<UserState> State
 @inject StateFacade StateFacade
 @inject SecurityTokenService TokenService
 
@@ -72,7 +72,7 @@
         StateFacade.UpdateUser(updateUserRequest);
     }
 
-    private void OnCurrentUserAssigned(object sender, AppState state)
+    private void OnCurrentUserAssigned(object sender, UserState state)
     {
         if (state.IsAuthenticated && !state.IsLoading)
         {

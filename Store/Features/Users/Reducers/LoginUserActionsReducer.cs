@@ -7,16 +7,16 @@ namespace BlazorConduit.Store.Features.Users.Reducers
     public static class LoginUserActionsReducer
     {
         [ReducerMethod]
-        public static AppState ReduceLoginUserAction(AppState state, LoginUserAction action) =>
-            new AppState(true, null, null, state.CurrentProfile);
+        public static UserState ReduceLoginUserAction(UserState _, LoginUserAction __) =>
+            new UserState(true, null, null);
 
         [ReducerMethod]
-        public static AppState ReduceLoginUserSuccessAction(AppState state, LoginUserSuccessAction action) =>
-            new AppState(false, action.User, null, state.CurrentProfile);
+        public static UserState ReduceLoginUserSuccessAction(UserState _, LoginUserSuccessAction action) =>
+            new UserState(false, null, action.User);
         [ReducerMethod]
 
-        public static AppState ReduceLoginUserFailureAction(AppState state, LoginUserFailureAction action) =>
-            new AppState(false, null, action.Errors, state.CurrentProfile);
+        public static UserState ReduceLoginUserFailureAction(UserState _, LoginUserFailureAction action) =>
+            new UserState(false, action.Errors, null);
 
     }
 }

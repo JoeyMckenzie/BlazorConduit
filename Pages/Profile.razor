@@ -4,10 +4,10 @@
 
 @using BlazorConduit.Models.Profile
 @using BlazorConduit.Services
-@using BlazorConduit.Store
+@using BlazorConduit.Store.State
 @using Fluxor 
 
-@inject IState<AppState> State
+@inject IState<ProfileState> State
 @inject StateFacade StateFacade
 
 @if (!(userProfile is null))
@@ -111,13 +111,13 @@
         {
             StateFacade.GetUserProfile(Username);
         }
-        else if (!(State.Value.CurrentProfile is null))
+        else if (State.Value.HasCachedProfile)
         {
             userProfile = State.Value.CurrentProfile;
         }
     }
 
-    private void RefreshProfileState(object sender, AppState state)
+    private void RefreshProfileState(object sender, ProfileState state)
     {
         userProfile = state.CurrentProfile;
         StateHasChanged();

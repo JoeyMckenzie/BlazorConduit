@@ -7,15 +7,15 @@ namespace BlazorConduit.Store.Features.Users.Reducers
     public static class UpdateUserActionsReducer
     {
         [ReducerMethod]
-        public static AppState ReduceUpdateUserAction(AppState state, UpdateUserAction action) =>
-            new AppState(true, state.CurrentUser, state.CurrentErrors, state.CurrentProfile);
+        public static UserState ReduceUpdateUserAction(UserState state, UpdateUserAction _) =>
+            new UserState(true, null, state.CurrentUser);
 
         [ReducerMethod]
-        public static AppState ReduceUpdateUserSuccessAction(AppState state, UpdateUserSuccessAction action) =>
-            new AppState(false, action.User, null, state.CurrentProfile);
+        public static UserState ReduceUpdateUserSuccessAction(UserState _, UpdateUserSuccessAction action) =>
+            new UserState(false, null, action.User);
 
         [ReducerMethod]
-        public static AppState ReduceUpdateUserFailureAction(AppState state, UpdateUserFailureAction action) =>
-            new AppState(false, state.CurrentUser, action.Errors, state.CurrentProfile);
+        public static UserState ReduceUpdateUserFailureAction(UserState state, UpdateUserFailureAction action) =>
+            new UserState(false, action.Errors, state.CurrentUser);
     }
 }

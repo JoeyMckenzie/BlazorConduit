@@ -7,11 +7,11 @@ namespace BlazorConduit.Store.Features.Profiles.Reducers
     public static class LoadUserProfileActionsReducer
     {
         [ReducerMethod]
-        public static AppState ReduceLoadUserProfileAction(AppState state, LoadUserProfileAction _) =>
-            new AppState(true, state.CurrentUser, null, state.CurrentProfile);
+        public static ProfileState ReduceLoadUserProfileAction(ProfileState _, LoadUserProfileAction __) =>
+            new ProfileState(true, null, null);
 
         [ReducerMethod]
-        public static AppState ReduceLoadUserProfileSuccessAction(AppState state, LoadUserProfileSuccessAction action) =>
-            new AppState(false, state.CurrentUser, null, action.LoadMemoryCachedProfile ? state.CurrentProfile : action.Profile);
+        public static ProfileState ReduceLoadUserProfileSuccessAction(ProfileState state, LoadUserProfileSuccessAction action) =>
+            new ProfileState(false, null, action.LoadMemoryCachedProfile ? state.CurrentProfile : action.Profile);
     }
 }
