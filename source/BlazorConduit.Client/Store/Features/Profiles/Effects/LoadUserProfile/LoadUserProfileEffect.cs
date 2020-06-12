@@ -2,7 +2,6 @@
 using BlazorConduit.Client.Models.Profile;
 using BlazorConduit.Client.Services;
 using BlazorConduit.Client.Store.Features.Profiles.Actions.LoadUserProfile;
-using BlazorConduit.Client.Store.State;
 using Fluxor;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,17 +14,18 @@ namespace BlazorConduit.Client.Store.Features.Profiles.Effects.LoadUserProfile
     {
         private readonly ConduitApiService _apiService;
         private readonly ILogger<LoadUserProfileEffect> _logger;
-        private readonly IState<ProfileState> _state;
+        private readonly SecurityTokenService _tokenService;
 
-        public LoadUserProfileEffect(ConduitApiService apiService, ILogger<LoadUserProfileEffect> logger, IState<ProfileState> state) =>
-            (_apiService, _logger, _state) = (apiService, logger, state);
+
+        public LoadUserProfileEffect(ConduitApiService apiService, ILogger<LoadUserProfileEffect> logger, SecurityTokenService tokenService) =>
+            (_apiService, _logger, _tokenService) = (apiService, logger, tokenService);
 
         protected override async Task HandleAsync(LoadUserProfileAction action, IDispatcher dispatcher)
         {
             try
             {
                 // Call the profile user endpoint with the username
-                var profileResponse = await _apiService.GetAsync<UserProfileResponse>($"profiles/{action.Username}");
+                var profileResponse = await _apiService.GetAsync<UserProfileResponse>($"profiles/{action.Username}", await _tokenService.GetTokenAsync());
 
                 if (profileResponse is null || profileResponse.Profile is null)
                 {

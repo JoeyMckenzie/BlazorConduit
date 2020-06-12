@@ -7,8 +7,10 @@
 @using BlazorConduit.Client.Store.State
 @using Fluxor 
 
-@inject IState<ProfileState> State
+@inject IState<ProfileState> ProfileState
+@inject IState<UserState> UserState
 @inject StateFacade StateFacade
+@inject NavigationManager Navigation
 
 @if (!(userProfile is null))
 {
@@ -23,11 +25,30 @@
                         <img src="@userProfile.Image" class="user-img" />
                         <h4>@userProfile.Username</h4>
                         <p>@userProfile.Bio</p>
-                        <button class="btn btn-sm btn-outline-secondary action-btn">
-                            <i class="ion-plus-round"></i>
-                            &nbsp;
-                            Follow @userProfile.Username
-                        </button>
+                        @if (isCurrentUser)
+                        {
+                            <button @onclick="NavigateToSettings" class="btn btn-sm btn-outline-secondary action-btn">
+                                <i class="ion-gear-a"></i>
+                                &nbsp;
+                                Edit Profile Settings
+                            </button>
+                        }
+                        else if (userProfile.Following)
+                        {
+                            <button @onclick="() => InteractWithUserProfile(UserProfileInteractionContext.Unfollow)" class="btn btn-sm btn-outline-secondary action-btn">
+                                <i class="ion-minus-round"></i>
+                                &nbsp;
+                                Unfollow @userProfile.Username
+                            </button>
+                        }
+                        else
+                        {
+                            <button @onclick="() => InteractWithUserProfile(UserProfileInteractionContext.Follow)" class="btn btn-sm btn-outline-secondary action-btn">
+                                <i class="ion-plus-round"></i>
+                                &nbsp;
+                                Follow @userProfile.Username
+                            </button>
+                        }
                     </div>
                 </div>
             </div>
@@ -95,7 +116,15 @@
 
 @code {        
 
+    private enum UserProfileInteractionContext
+    {
+        Follow,
+        Unfollow
+    };
+
     private UserProfileDto? userProfile;
+
+    private bool isCurrentUser;
 
     [Parameter]
     public string? Username { get; set; }
@@ -104,24 +133,69 @@
     {
         await base.OnInitializedAsync();
 
-        State.StateChanged += RefreshProfileState;
+        ProfileState.StateChanged += RefreshProfileState;
+
+        if (string.IsNullOrWhiteSpace(Username))
+        {
+            Navigation.NavigateTo("/");
+            return;
+        }
+
+        StateFacade.GetUserProfile(Username);
 
         // Load the current profile if none is available and a username was passed in (i.e. user refreshed)
-        if (!string.IsNullOrWhiteSpace(Username) && State.Value.CurrentProfile is null)
+        @*if (!string.IsNullOrWhiteSpace(Username) && ProfileState.Value.CurrentProfile is null)
         {
             StateFacade.GetUserProfile(Username);
         }
-        else if (State.Value.HasCachedProfile)
+        else if (ProfileState.Value.HasCachedProfile)
         {
-            userProfile = State.Value.CurrentProfile;
-        }
+            userProfile = ProfileState.Value.CurrentProfile;
+            isCurrentUser = IsCurrentUserProfile(ProfileState.Value);
+        }*@
     }
 
     private void RefreshProfileState(object sender, ProfileState state)
     {
         userProfile = state.CurrentProfile;
+        isCurrentUser = IsCurrentUserProfile(state);
 
         StateHasChanged();
+    }
+
+    private bool IsCurrentUserProfile(ProfileState state)
+    {
+        // No profile or current user, default to false
+        if (state.CurrentProfile is null || UserState.Value.CurrentUser is null)
+        {
+            return false;
+        }
+
+        // No profile or user username, default to false
+        if (string.IsNullOrWhiteSpace(state.CurrentProfile.Username) || string.IsNullOrWhiteSpace(UserState.Value.CurrentUser.Username))
+        {
+            return false;
+        }
+
+        return string.Equals(state.CurrentProfile.Username, UserState.Value.CurrentUser.Username);
+    }
+
+    private void NavigateToSettings()
+    {
+        Navigation.NavigateTo("/settings");
+    }
+
+    private void InteractWithUserProfile(UserProfileInteractionContext context)
+    {
+        switch (context)
+        {
+            case UserProfileInteractionContext.Follow:
+                StateFacade.FollowUserProfile(Username!);
+                break;
+            default:
+                StateFacade.UnfollowUserProfile(Username!);
+                break;
+        }
     }
 
 }

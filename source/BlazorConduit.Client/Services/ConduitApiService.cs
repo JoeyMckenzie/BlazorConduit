@@ -32,6 +32,12 @@ namespace BlazorConduit.Client.Services
             return _httpClient.PostAsync(path, default);
         }
 
+        public Task<HttpResponseMessage> DeleteNoContentAsync(string path, string? token)
+        {
+            AttachDefaultAuthenticationHeader(token);
+            return _httpClient.DeleteAsync(path, default);
+        }
+
         public Task<HttpResponseMessage> PutAsync<TBody>(string path, TBody body, string? token = null)
             where TBody : class
         {

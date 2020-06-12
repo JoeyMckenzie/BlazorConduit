@@ -6,6 +6,8 @@ using BlazorConduit.Client.Store.Features.Users.Actions.GetCurrentUser;
 using BlazorConduit.Client.Store.Features.Users.Actions.LoginUser;
 using BlazorConduit.Client.Store.Features.Users.Actions.RegisterUser;
 using BlazorConduit.Client.Store.Features.Users.Actions.UpdateUser;
+using BlazorConduit.Client.Store.Profiles.Actions.FollowUser;
+using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUser;
 
 namespace BlazorConduit.Client.Services
 {
@@ -51,6 +53,18 @@ namespace BlazorConduit.Client.Services
         {
             _logger.LogInformation($"Loading user profile for {username}");
             _dispatcher.Dispatch(new LoadUserProfileAction(username));
+        }
+
+        public void FollowUserProfile(string username)
+        {
+            _logger.LogInformation($"Following user profile {username}");
+            _dispatcher.Dispatch(new FollowUserAction(username));
+        }
+
+        public void UnfollowUserProfile(string username)
+        {
+            _logger.LogInformation($"Unfollowing user profile {username}");
+            _dispatcher.Dispatch(new UnfollowUserAction(username));
         }
     }
 }
