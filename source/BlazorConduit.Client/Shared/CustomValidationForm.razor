@@ -1,6 +1,6 @@
 ﻿@typeparam TState
 
-<EditForm EditContext="editContext" OnSubmit="async () => await OnSubmitClicked()">
+<EditForm EditContext="EditContext" OnSubmit="async () => await OnSubmitClicked()">
     <DataAnnotationsValidator />
 
     @*
@@ -11,9 +11,9 @@
     {
         <ul class="error-messages">
             @* Display any validation errors *@
-            @if (!(editContext is null))
+            @if (!(EditContext is null))
             {
-                @foreach (var errorMessage in editContext.GetValidationMessages())
+                @foreach (var errorMessage in EditContext.GetValidationMessages())
                 {
                     <li>@errorMessage</li>
                 }
@@ -34,7 +34,7 @@
     <fieldset>
         @ChildContent
 
-        <button class="btn btn-lg pull-xs-right btn-primary" type="button">
+        <button class="btn btn-lg pull-xs-right btn-primary" type="submit">
             @ButtonText
         </button>
     </fieldset>

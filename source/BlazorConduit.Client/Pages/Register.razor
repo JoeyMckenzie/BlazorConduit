@@ -22,39 +22,7 @@
                     <a href="/login">Have an account?</a>
                 </p>
 
-
-
-                <EditForm EditContext="editContext" OnSubmit="OnSignUpClicked">
-                    <DataAnnotationsValidator />
-
-                    @* 
-                        Bit of a hack, but alas, my StackOverflow skills were overcome when searching on how 
-                        override the custom CSS for the <ValidationSummary /> component. This does the job for now.
-                    *@
-                    @if (!isValid)
-                    {
-                        <ul class="error-messages">
-                            @* Display any validation errors *@
-                            @if (!(editContext is null))
-                            {
-                                @foreach (var errorMessage in editContext.GetValidationMessages())
-                                {
-                                    <li>@errorMessage</li>
-                                }
-                            }
-
-                            @* Display any errors returned from the API response *@
-                            @if (State.Value.HasCurrentErrors)
-                            {
-                                @foreach (var error in State.Value.CurrentErrors!)
-                                {
-                                    <li>@error</li>
-
-                                }
-                            }
-                        </ul>
-                    }
-
+                <CustomValidationForm TState="UserState" State="State" ValidationObject="validationModel" ButtonText="Sign up" SubmitClickedCallback="OnSignUpClicked">
                     <fieldset class="form-group">
                         <InputText class="form-control form-control-lg" placeholder="Your Name" @bind-Value="validationModel.Username" />
                     </fieldset>
@@ -64,10 +32,7 @@
                     <fieldset class="form-group">
                         <InputText class="form-control form-control-lg" placeholder="Password" type="password" @bind-Value="validationModel.Password" />
                     </fieldset>
-                    <button type="submit" class="btn btn-lg btn-primary pull-xs-right">
-                        Sign up
-                    </button>
-                </EditForm>
+                </CustomValidationForm>
             </div>
 
         </div>
@@ -78,23 +43,13 @@
 
     private RegisterUserValidationModel validationModel = new RegisterUserValidationModel();
 
-    private EditContext? editContext;
-
-    private bool isValid = true;
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        editContext = new EditContext(validationModel);
-
-        State.StateChanged += DisplayValidationErrors;
     }
 
-    private void OnSignUpClicked()
+    private void OnSignUpClicked(bool isValid)
     {
-        // Do not allow the user to attempt to register if the form is invalid
-        isValid = !(editContext is null) && editContext.Validate();
-
         if (isValid)
         {
             // The validation model ensures the strings are not null/empty, let the compiler know with the bang (!) operator
@@ -105,17 +60,4 @@
         }
     }
 
-    private void DisplayValidationErrors(object sender, UserState state)
-    {
-        if (state.HasCurrentErrors)
-        {
-            isValid = false;
-        }
-        else
-        {
-            isValid = true;
-        }
-
-        StateHasChanged();
-    }
 }

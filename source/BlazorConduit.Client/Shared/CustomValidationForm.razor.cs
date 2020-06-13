@@ -14,9 +14,9 @@ namespace BlazorConduit.Client.Shared
     public partial class CustomValidationForm<TState> : ComponentBase
         where TState : RootState
     {
-        public EditContext? editContext;
+        public EditContext? EditContext;
 
-        public bool isValid = true;
+        public bool IsValid;
 
         [Parameter]
         public RenderFragment? ChildContent { get; set; }
@@ -42,16 +42,17 @@ namespace BlazorConduit.Client.Shared
             await base.OnInitializedAsync();
 
             // Register the validation display event and initialize the edit context
+            IsValid = true;
+            EditContext = new EditContext(ValidationObject);
             State!.StateChanged += DisplayValidationErrors;
-            editContext = new EditContext(ValidationObject);
         }
 
         public async Task OnSubmitClicked()
         {
             // Do not allow the user to proceed if their are validation edits
-            isValid = !(editContext is null) && editContext.Validate();
+            IsValid = !(EditContext is null) && EditContext.Validate();
 
-            await SubmitClickedCallback.InvokeAsync(isValid);
+            await SubmitClickedCallback.InvokeAsync(IsValid);
         }
 
         private void ThrowExceptionIfArgumentIsNull(object? input)
@@ -64,7 +65,7 @@ namespace BlazorConduit.Client.Shared
 
         private void DisplayValidationErrors(object sender, TState state)
         {
-            isValid = state.HasCurrentErrors;
+            IsValid = state.HasCurrentErrors;
 
             StateHasChanged();
         }
