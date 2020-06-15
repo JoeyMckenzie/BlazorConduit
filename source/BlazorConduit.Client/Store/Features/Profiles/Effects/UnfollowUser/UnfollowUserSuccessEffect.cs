@@ -17,7 +17,7 @@ namespace BlazorConduit.Client.Store.Features.Profiles.Effects.UnfollowUser
         {
             // Reload the user profile on a successful follow
             _logger.LogInformation($"Successfully unfollowed user {action.Profile.Username}, refreshing profile...");
-            dispatcher.Dispatch(new LoadUserProfileSuccessAction(action.Profile));
+            dispatcher.Dispatch(new SetUserProfileAction(action.Profile));
 
             return Task.CompletedTask;
         }

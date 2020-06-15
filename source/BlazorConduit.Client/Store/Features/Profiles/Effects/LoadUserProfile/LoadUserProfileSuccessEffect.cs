@@ -8,8 +8,8 @@ namespace BlazorConduit.Client.Store.Features.Profiles.Effects.LoadUserProfile
 {
     public class LoadUserProfileSuccessEffect : Effect<LoadUserProfileSuccessAction>
     {
-        private ILogger<LoadUserProfileSuccessEffect> _logger;
-        private NavigationManager _navigation;
+        private readonly ILogger<LoadUserProfileSuccessEffect> _logger;
+        private readonly NavigationManager _navigation;
 
         public LoadUserProfileSuccessEffect(ILogger<LoadUserProfileSuccessEffect> logger, NavigationManager navigation) =>
             (_logger, _navigation) = (logger, navigation);

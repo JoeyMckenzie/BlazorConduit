@@ -2,6 +2,8 @@
 
 @page "/article/create-post"
 
+@using BlazorConduit.Client.Models.Articles.Dtos
+@using BlazorConduit.Client.Models.Articles.Requests 
 @using BlazorConduit.Client.Models.Articles.Validation 
 @using BlazorConduit.Client.Services 
 @using BlazorConduit.Client.Store.State
@@ -15,56 +17,20 @@
         <div class="row">
 
             <div class="col-md-10 offset-md-1 col-xs-12">
-                <EditForm EditContext="editContext">
-                    <DataAnnotationsValidator />
-
-                    @*
-                        Bit of a hack, but alas, my StackOverflow skills were overcome when searching on how
-                        override the custom CSS for the <ValidationSummary /> component. This does the job for now.
-                    *@
-                    @if (!isValid)
-                    {
-                        <ul class="error-messages">
-                            @* Display any validation errors *@
-                            @if (!(editContext is null))
-                            {
-                                @foreach (var errorMessage in editContext.GetValidationMessages())
-                                {
-                                    <li>@errorMessage</li>
-                                }
-                            }
-
-                            @* Display any errors returned from the API response *@
-                            @if (State.Value.HasCurrentErrors)
-                            {
-                                @* Let the compiler know we have current errors since it is a nullable field, and already null checked with HasCurrentErrors *@
-                                @foreach (var error in State.Value.CurrentErrors!)
-                                {
-                                    <li>@error</li>
-
-                                }
-                            }
-                        </ul>
-                    }
-
-                    <fieldset>
-                        <fieldset class="form-group">
-                            <input type="text" class="form-control form-control-lg" placeholder="Article Title">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input type="text" class="form-control" placeholder="What's this article about?">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)"></textarea>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input type="text" class="form-control" placeholder="Enter tags"><div class="tag-list"></div>
-                        </fieldset>
-                        <button class="btn btn-lg pull-xs-right btn-primary" type="button">
-                            Publish Article
-                        </button>
+                <CustomValidationForm TState="ArticleState" State="State" ValidationObject="validationModel" SubmitClickedCallback="OnPublishButtonClicked" ButtonText="Publish Article">
+                    <fieldset class="form-group">
+                        <InputText class="form-control form-control-lg" placeholder="Article Title" @bind-Value="validationModel.Title"/>
                     </fieldset>
-                </EditForm>
+                    <fieldset class="form-group">
+                        <InputText class="form-control" placeholder="What's this article about?" @bind-Value="validationModel.Description"/>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <InputTextArea class="form-control" rows="8" placeholder="Write your article (in markdown)" @bind-Value="validationModel.Body"/>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <InputText class="form-control" placeholder="Enter tags" @bind-Value="tagList"/><div class="tag-list"></div>
+                    </fieldset>
+                </CustomValidationForm>
             </div>
 
         </div>
@@ -75,15 +41,30 @@
 
     private CreateArticleValidationModel validationModel = new CreateArticleValidationModel();
 
-    private EditContext? editContext;
-
-    private bool isValid = false;
+    private string? tagList;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+    }
 
-        editContext = new EditContext(validationModel);
+    private void OnPublishButtonClicked(bool isValid)
+    {
+        if (isValid)
+        {
+            var tokenizedTags = new string[] { };
+
+            // Parse the tag list into a string array to send on the create request
+            if (!string.IsNullOrWhiteSpace(tagList))
+            {
+                tokenizedTags = tagList.Split(" ");
+            }
+
+            var createArticleDto = new CreateArticleDto(validationModel.Title!, validationModel.Description!, validationModel.Body!, tokenizedTags);
+            var createArticleRequest = new CreateArticleRequest(createArticleDto);
+
+            StateFacade.CreateArticle(createArticleRequest);
+        }
     }
 
 }

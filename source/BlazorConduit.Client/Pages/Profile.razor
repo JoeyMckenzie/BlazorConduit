@@ -142,17 +142,6 @@
         }
 
         StateFacade.GetUserProfile(Username);
-
-        // Load the current profile if none is available and a username was passed in (i.e. user refreshed)
-        @*if (!string.IsNullOrWhiteSpace(Username) && ProfileState.Value.CurrentProfile is null)
-        {
-            StateFacade.GetUserProfile(Username);
-        }
-        else if (ProfileState.Value.HasCachedProfile)
-        {
-            userProfile = ProfileState.Value.CurrentProfile;
-            isCurrentUser = IsCurrentUserProfile(ProfileState.Value);
-        }*@
     }
 
     private void RefreshProfileState(object sender, ProfileState state)

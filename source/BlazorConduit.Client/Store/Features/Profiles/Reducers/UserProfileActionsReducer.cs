@@ -1,4 +1,5 @@
 ﻿using BlazorConduit.Client.Store.Features.Profiles.Actions.FollowUser;
+using BlazorConduit.Client.Store.Features.Profiles.Actions.LoadUserProfile;
 using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUser;
 using BlazorConduit.Client.Store.Profiles.Actions.FollowUser;
 using BlazorConduit.Client.Store.State;
@@ -31,5 +32,9 @@ namespace BlazorConduit.Client.Store.Features.Profiles.Reducers
         [ReducerMethod]
         public static ProfileState ReduceUnfollowUserFailureAction(ProfileState state, UnfollowUserFailureAction action) =>
             new ProfileState(false, action.Errors, state.CurrentProfile);
+
+        [ReducerMethod]
+        public static ProfileState ReduceSetUserProfileAction(ProfileState state, SetUserProfileAction action) =>
+            new ProfileState(state.IsLoading, state.CurrentErrors, action.Profile);
     }
 }

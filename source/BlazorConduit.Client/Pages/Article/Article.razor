@@ -1,122 +1,276 @@
-﻿@page "/article"
+﻿@page "/article/{articleSlug}"
 
-<div class="article-page">
+@using BlazorConduit.Client.Models.Articles.Dtos
+@using BlazorConduit.Client.Services 
+@using BlazorConduit.Client.Store.State 
+@using Fluxor
 
-    <div class="banner">
-        <div class="container">
+@inject IState<ArticleState> ArticleState
+@inject IState<ProfileState> ProfileState
+@inject IState<UserState> UserState
+@inject StateFacade StateFacade
+@inject NavigationManager Navigation
 
-            <h1>How to build webapps that scale</h1>
+@if (!(article is null) && !(article.Author is null))
+{
+    <div class="article-page">
 
-            <div class="article-meta">
-                <a href=""><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-                <div class="info">
-                    <a href="" class="author">Eric Simons</a>
-                    <span class="date">January 20th</span>
-                </div>
-                <button class="btn btn-sm btn-outline-secondary">
-                    <i class="ion-plus-round"></i>
-                    &nbsp;
-                    Follow Eric Simons <span class="counter">(10)</span>
-                </button>
-                &nbsp;&nbsp;
-                <button class="btn btn-sm btn-outline-primary">
-                    <i class="ion-heart"></i>
-                    &nbsp;
-                    Favorite Post <span class="counter">(29)</span>
-                </button>
-            </div>
+        <div class="banner">
+            <div class="container">
 
-        </div>
-    </div>
+                <h1>@article.Title</h1>
 
-    <div class="container page">
-
-        <div class="row article-content">
-            <div class="col-md-12">
-                <p>
-                    Web development technologies have evolved at an incredible clip over the past few years.
-                </p>
-                <h2 id="introducing-ionic">Introducing RealWorld.</h2>
-                <p>It's a great solution for learning how other frameworks work.</p>
-            </div>
-        </div>
-
-        <hr />
-
-        <div class="article-actions">
-            <div class="article-meta">
-                <a href="profile.html"><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-                <div class="info">
-                    <a href="" class="author">Eric Simons</a>
-                    <span class="date">January 20th</span>
-                </div>
-
-                <button class="btn btn-sm btn-outline-secondary">
-                    <i class="ion-plus-round"></i>
-                    &nbsp;
-                    Follow Eric Simons <span class="counter">(10)</span>
-                </button>
-                &nbsp;
-                <button class="btn btn-sm btn-outline-primary">
-                    <i class="ion-heart"></i>
-                    &nbsp;
-                    Favorite Post <span class="counter">(29)</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="row">
-
-            <div class="col-xs-12 col-md-8 offset-md-2">
-
-                <form class="card comment-form">
-                    <div class="card-block">
-                        <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+                <div class="article-meta">
+                    <a @onclick="() => StateFacade.GetUserProfile(string.IsNullOrWhiteSpace(article.Author.Username) ? string.Empty : article.Author.Username)"><img src="@article.Author.Image" /></a>
+                    <div class="info">
+                        <a href="" class="author">@article.Author.Username</a>
+                        <span class="date">@article.CreatedAt.ToShortDateString()</span>
                     </div>
-                    <div class="card-footer">
-                        <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-                        <button class="btn btn-sm btn-primary">
-                            Post Comment
+
+                    @if (isCurrentUser)
+                    {
+                        <button class="btn btn-sm btn-outline-secondary action-btn">
+                            <i class="ion-gear-a"></i>
+                            &nbsp;
+                            Edit Profile Settings
                         </button>
-                    </div>
-                </form>
+                    }
+                    else if (!string.IsNullOrWhiteSpace(article.Author.Username))
+                    {
+                        if (article.Author.Following)
+                        {
+                            <button @onclick="() => StateFacade.UnfollowUserProfile(article.Author.Username)" class="btn btn-sm btn-secondary">
+                                <i class="ion-minus-round"></i>
+                                &nbsp;
+                                Unfollow @article.Author.Username
+                            </button>
+                        }
+                        else
+                        {
+                            <button @onclick="() => StateFacade.FollowUserProfile(article.Author.Username)" class="btn btn-sm btn-outline-secondary">
+                                <i class="ion-plus-round"></i>
+                                &nbsp;
+                                Follow @article.Author.Username
+                            </button>
+                        }
+                    }
 
-                <div class="card">
-                    <div class="card-block">
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    </div>
-                    <div class="card-footer">
-                        <a href="" class="comment-author">
-                            <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-                        </a>
-                        &nbsp;
-                        <a href="" class="comment-author">Jacob Schmidt</a>
-                        <span class="date-posted">Dec 29th</span>
-                    </div>
-                </div>
+                    &nbsp;&nbsp;
 
-                <div class="card">
-                    <div class="card-block">
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    </div>
-                    <div class="card-footer">
-                        <a href="" class="comment-author">
-                            <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-                        </a>
-                        &nbsp;
-                        <a href="" class="comment-author">Jacob Schmidt</a>
-                        <span class="date-posted">Dec 29th</span>
-                        <span class="mod-options">
-                            <i class="ion-edit"></i>
-                            <i class="ion-trash-a"></i>
-                        </span>
-                    </div>
+                    @* Favorite button state markup *@
+                    @if (article.Favorited)
+                    {
+                        <button class="btn btn-sm btn-primary">
+                            <i class="ion-heart"></i>
+                            &nbsp;
+                            Unfavorite Post <span class="counter">@article.FavoritesCount</span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="ion-heart"></i>
+                            &nbsp;
+                            Favorite Post <span class="counter">@article.FavoritesCount</span>
+                        </button>
+                    }
                 </div>
 
             </div>
-
         </div>
 
-    </div>
+        <div class="container page">
 
-</div>S
+            <div class="row article-content">
+                <div class="col-md-12">
+                    @article.Body
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="article-actions">
+                <div class="article-meta">
+                    <a @onclick="() => StateFacade.GetUserProfile(string.IsNullOrWhiteSpace(article.Author.Username) ? string.Empty : article.Author.Username)"><img src="@article.Author.Image" /></a>
+                    <div class="info">
+                        <a @onclick="() => StateFacade.GetUserProfile(string.IsNullOrWhiteSpace(article.Author.Username) ? string.Empty : article.Author.Username)" class="author">@article.Author.Username</a>
+                        <span class="date">@article.CreatedAt.ToShortTimeString()</span>
+                    </div>
+
+                    @if (isCurrentUser)
+                    {
+                        <button class="btn btn-sm btn-outline-secondary action-btn">
+                            <i class="ion-gear-a"></i>
+                            &nbsp;
+                            Edit Profile Settings
+                        </button>
+                    }
+                    else if (!string.IsNullOrWhiteSpace(article.Author.Username))
+                    {
+                        if (article.Author.Following)
+                        {
+                            <button @onclick="() => StateFacade.UnfollowUserProfile(article.Author.Username)" class="btn btn-sm btn-secondary">
+                                <i class="ion-minus-round"></i>
+                                &nbsp;
+                                Unfollow @article.Author.Username
+                            </button>
+                        }
+                        else
+                        {
+                            <button @onclick="() => StateFacade.FollowUserProfile(article.Author.Username)" class="btn btn-sm btn-outline-secondary">
+                                <i class="ion-plus-round"></i>
+                                &nbsp;
+                                Follow @article.Author.Username
+                            </button>
+                        }
+                    }
+
+                    &nbsp;&nbsp;
+
+                    @* Favorite button state markup *@
+                    @if (article.Favorited)
+                    {
+                        <button class="btn btn-sm btn-primary">
+                            <i class="ion-heart"></i>
+                            &nbsp;
+                            Unfavorite Post <span class="counter">@article.FavoritesCount</span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="ion-heart"></i>
+                            &nbsp;
+                            Favorite Post <span class="counter">@article.FavoritesCount</span>
+                        </button>
+                    }
+
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-xs-12 col-md-8 offset-md-2">
+
+                    <form class="card comment-form">
+                        <div class="card-block">
+                            <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+                        </div>
+                        <div class="card-footer">
+                            <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
+                            <button class="btn btn-sm btn-primary">
+                                Post Comment
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="card">
+                        <div class="card-block">
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="" class="comment-author">
+                                <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
+                            </a>
+                            &nbsp;
+                            <a href="" class="comment-author">Jacob Schmidt</a>
+                            <span class="date-posted">Dec 29th</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-block">
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="" class="comment-author">
+                                <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
+                            </a>
+                            &nbsp;
+                            <a href="" class="comment-author">Jacob Schmidt</a>
+                            <span class="date-posted">Dec 29th</span>
+                            <span class="mod-options">
+                                <i class="ion-edit"></i>
+                                <i class="ion-trash-a"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    private ArticleDto? article;
+
+    private bool isCurrentUser;
+
+    [Parameter]
+    public string? ArticleSlug { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        ArticleState.StateChanged += OnArticleLoaded;
+        ProfileState.StateChanged += OnFollowUnfollowClicked;
+
+        if (string.IsNullOrWhiteSpace(ArticleSlug))
+        {
+            // Navigate back to home if no slug is found
+            Navigation.NavigateTo("/");
+            return;
+        }
+
+        // Load the article from the store, if the slugs match
+        if (string.Equals(ArticleSlug, ArticleState.Value.CurrentArticle?.Slug))
+        {
+            article = ArticleState.Value.CurrentArticle;
+        }
+        else
+        {
+            // Load the article by slug
+            StateFacade.RetrieveArticle(ArticleSlug);
+        }
+    }
+
+    private bool IsCurrentUserProfile(ArticleState state)
+    {
+        // No profile or current user, default to false
+        if (state.CurrentArticle is null || state.CurrentArticle.Author is null || UserState.Value.CurrentUser is null)
+        {
+            return false;
+        }
+
+        // No profile or user username, default to false
+        if (string.IsNullOrWhiteSpace(state.CurrentArticle.Author.Username) || string.IsNullOrWhiteSpace(UserState.Value.CurrentUser.Username))
+        {
+            return false;
+        }
+
+        return string.Equals(state.CurrentArticle.Author.Username, UserState.Value.CurrentUser.Username);
+    }
+
+    private void OnArticleLoaded(object sender, ArticleState state)
+    {
+        article = state.CurrentArticle;
+        isCurrentUser = IsCurrentUserProfile(state);
+
+        StateHasChanged();
+    }
+
+    private void OnFollowUnfollowClicked(object sender, ProfileState state)
+    {
+        if (article is null)
+        {
+            return;
+        }
+
+        article.Author = state.CurrentProfile;
+
+        StateHasChanged();
+    }
+
+}

@@ -17,7 +17,7 @@ namespace BlazorConduit.Client.Store.Features.Profiles.Effects.FollowUser
         {
             // Reload the user profile on a successful follow
             _logger.LogInformation($"Successfully followed user {action.Profile.Username}, refreshing profile...");
-            dispatcher.Dispatch(new LoadUserProfileSuccessAction(action.Profile));
+            dispatcher.Dispatch(new SetUserProfileAction(action.Profile));
 
             return Task.CompletedTask;
         }

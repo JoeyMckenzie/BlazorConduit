@@ -8,6 +8,10 @@ using BlazorConduit.Client.Store.Features.Users.Actions.RegisterUser;
 using BlazorConduit.Client.Store.Features.Users.Actions.UpdateUser;
 using BlazorConduit.Client.Store.Profiles.Actions.FollowUser;
 using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUser;
+using BlazorConduit.Client.Models.Articles.Requests;
+using BlazorConduit.Client.Store.Features.Articles.Actions.CreateArticle;
+using BlazorConduit.Client.Store.Features.Articles.Actions.RetrieveArticle;
+using BlazorConduit.Client.Store.Features.Shared.Reducers;
 
 namespace BlazorConduit.Client.Services
 {
@@ -65,6 +69,21 @@ namespace BlazorConduit.Client.Services
         {
             _logger.LogInformation($"Unfollowing user profile {username}");
             _dispatcher.Dispatch(new UnfollowUserAction(username));
+        }
+
+        /**
+         * Article actions
+         */
+        public void CreateArticle(CreateArticleRequest request)
+        {
+            _logger.LogInformation($"Creating article {request.Article.Title}");
+            _dispatcher.Dispatch(new CreateArticleAction(request));
+        }
+
+        public void RetrieveArticle(string slug)
+        {
+            _logger.LogInformation($"Retrieving article {slug}");
+            _dispatcher.Dispatch(new RetrieveArticleAction(slug));
         }
     }
 }
