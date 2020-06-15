@@ -1,7 +1,7 @@
 ﻿using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Models.Profiles;
 using BlazorConduit.Client.Services;
-using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUser;
+using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUserFromProfile;
 using Fluxor;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BlazorConduit.Client.Store.Features.Profiles.Effects.UnfollowUser
 {
-    public class UnfollowUserEffect : Effect<UnfollowUserAction>
+    public class UnfollowUserEffect : Effect<UnfollowUserFromProfileAction>
     {
         private readonly ILogger<UnfollowUserEffect> _logger;
         private readonly ConduitApiService _apiService;
@@ -20,7 +20,7 @@ namespace BlazorConduit.Client.Store.Features.Profiles.Effects.UnfollowUser
         public UnfollowUserEffect(ILogger<UnfollowUserEffect> logger, ConduitApiService apiService, SecurityTokenService tokenService) =>
             (_logger, _apiService, _tokenService) = (logger, apiService, tokenService);
 
-        protected override async Task HandleAsync(UnfollowUserAction action, IDispatcher dispatcher)
+        protected override async Task HandleAsync(UnfollowUserFromProfileAction action, IDispatcher dispatcher)
         {
             try
             {
@@ -41,17 +41,17 @@ namespace BlazorConduit.Client.Store.Features.Profiles.Effects.UnfollowUser
                     throw new ConduitApiException($"No profile returned in response to unfollow for user {action.Username}", HttpStatusCode.InternalServerError);
                 }
 
-                dispatcher.Dispatch(new UnfollowUserSuccessAction(profile.Profile));
+                dispatcher.Dispatch(new UnfollowUserFromProfileSuccessAction(profile.Profile));
             }
             catch (ConduitApiException e)
             {
                 _logger.LogError($"Validation error during profile unfollow for user {action.Username}");
-                dispatcher.Dispatch(new UnfollowUserFailureAction(e.Message, e.ApiErrors));
+                dispatcher.Dispatch(new UnfollowUserFromProfileFailureAction(e.Message, e.ApiErrors));
             }
             catch (Exception e)
             {
                 _logger.LogError($"Error during profile unfollow for user {action.Username}");
-                dispatcher.Dispatch(new UnfollowUserFailureAction(e.Message));
+                dispatcher.Dispatch(new UnfollowUserFromProfileFailureAction(e.Message));
             }
         }
     }

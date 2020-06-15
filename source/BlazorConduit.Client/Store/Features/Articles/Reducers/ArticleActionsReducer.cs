@@ -12,29 +12,29 @@ namespace BlazorConduit.Client.Store.Features.Articles.Reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceCreateArticleAction(ArticleState _, CreateArticleAction __) =>
-            new ArticleState(true, null, null);
+            new ArticleState(true, null, null, null);
 
         [ReducerMethod]
         public static ArticleState ReduceCreateArticleSuccessAction(ArticleState _, CreateArticleSuccessAction action) =>
-            new ArticleState(false, null, action.Article);
+            new ArticleState(false, null, action.Article, null);
 
         [ReducerMethod]
         public static ArticleState ReduceCreateArticleFailureAction(ArticleState _, CreateArticleFailureAction action) =>
-            new ArticleState(false, action.Errors, null);
+            new ArticleState(false, action.Errors, null, null);
 
         /*
          * Retrieve action reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceRetieveArticleAction(ArticleState _, RetrieveArticleAction __) =>
-            new ArticleState(true, null, null);
+            new ArticleState(true, null, null, null);
 
         [ReducerMethod]
         public static ArticleState ReduceRetrieveArticleSuccessAction(ArticleState _, RetrieveArticleSuccessAction action) =>
-            new ArticleState(false, null, action.Article);
+            new ArticleState(false, null, action.Article, null);
 
         [ReducerMethod]
         public static ArticleState ReduceRetrieveArticleFailureAction(ArticleState _, RetrieveArticleFailureAction action) =>
-            new ArticleState(false, action.Errors, null);
+            new ArticleState(false, action.Errors, null, null);
     }
 }

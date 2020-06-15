@@ -6,12 +6,13 @@ using BlazorConduit.Client.Store.Features.Users.Actions.GetCurrentUser;
 using BlazorConduit.Client.Store.Features.Users.Actions.LoginUser;
 using BlazorConduit.Client.Store.Features.Users.Actions.RegisterUser;
 using BlazorConduit.Client.Store.Features.Users.Actions.UpdateUser;
-using BlazorConduit.Client.Store.Profiles.Actions.FollowUser;
-using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUser;
 using BlazorConduit.Client.Models.Articles.Requests;
 using BlazorConduit.Client.Store.Features.Articles.Actions.CreateArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.RetrieveArticle;
-using BlazorConduit.Client.Store.Features.Shared.Reducers;
+using BlazorConduit.Client.Store.Features.Articles.Actions.FollowUserFromArticle;
+using BlazorConduit.Client.Store.Features.Articles.Actions.UnfollowUserFromArticle;
+using BlazorConduit.Client.Store.Features.Profiles.Actions.FollowUserFromProfile;
+using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUserFromProfile;
 
 namespace BlazorConduit.Client.Services
 {
@@ -62,13 +63,13 @@ namespace BlazorConduit.Client.Services
         public void FollowUserProfile(string username)
         {
             _logger.LogInformation($"Following user profile {username}");
-            _dispatcher.Dispatch(new FollowUserAction(username));
+            _dispatcher.Dispatch(new FollowUserFromProfileAction(username));
         }
 
         public void UnfollowUserProfile(string username)
         {
             _logger.LogInformation($"Unfollowing user profile {username}");
-            _dispatcher.Dispatch(new UnfollowUserAction(username));
+            _dispatcher.Dispatch(new UnfollowUserFromProfileAction(username));
         }
 
         /**
@@ -84,6 +85,18 @@ namespace BlazorConduit.Client.Services
         {
             _logger.LogInformation($"Retrieving article {slug}");
             _dispatcher.Dispatch(new RetrieveArticleAction(slug));
+        }
+
+        public void FollowUserFromArticle(string username)
+        {
+            _logger.LogInformation($"Following user from article page {username}");
+            _dispatcher.Dispatch(new FollowUserFromArticleAction(username));
+        }
+
+        public void UnfollowUserFromArticle(string username)
+        {
+            _logger.LogInformation($"Unfollowing user from article page {username}");
+            _dispatcher.Dispatch(new UnfollowUserFromArticleAction(username));
         }
     }
 }

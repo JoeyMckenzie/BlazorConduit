@@ -6,7 +6,6 @@
 @using Fluxor
 
 @inject IState<ArticleState> ArticleState
-@inject IState<ProfileState> ProfileState
 @inject IState<UserState> UserState
 @inject StateFacade StateFacade
 @inject NavigationManager Navigation
@@ -37,9 +36,9 @@
                     }
                     else if (!string.IsNullOrWhiteSpace(article.Author.Username))
                     {
-                        if (article.Author.Following)
+                        if (isFollowing)
                         {
-                            <button @onclick="() => StateFacade.UnfollowUserProfile(article.Author.Username)" class="btn btn-sm btn-secondary">
+                            <button @onclick="() => StateFacade.UnfollowUserFromArticle(article.Author.Username)" class="btn btn-sm btn-secondary">
                                 <i class="ion-minus-round"></i>
                                 &nbsp;
                                 Unfollow @article.Author.Username
@@ -47,7 +46,7 @@
                         }
                         else
                         {
-                            <button @onclick="() => StateFacade.FollowUserProfile(article.Author.Username)" class="btn btn-sm btn-outline-secondary">
+                            <button @onclick="() => StateFacade.FollowUserFromArticle(article.Author.Username)" class="btn btn-sm btn-outline-secondary">
                                 <i class="ion-plus-round"></i>
                                 &nbsp;
                                 Follow @article.Author.Username
@@ -107,9 +106,9 @@
                     }
                     else if (!string.IsNullOrWhiteSpace(article.Author.Username))
                     {
-                        if (article.Author.Following)
+                        if (isFollowing)
                         {
-                            <button @onclick="() => StateFacade.UnfollowUserProfile(article.Author.Username)" class="btn btn-sm btn-secondary">
+                            <button @onclick="() => StateFacade.UnfollowUserFromArticle(article.Author.Username)" class="btn btn-sm btn-secondary">
                                 <i class="ion-minus-round"></i>
                                 &nbsp;
                                 Unfollow @article.Author.Username
@@ -117,7 +116,7 @@
                         }
                         else
                         {
-                            <button @onclick="() => StateFacade.FollowUserProfile(article.Author.Username)" class="btn btn-sm btn-outline-secondary">
+                            <button @onclick="() => StateFacade.FollowUserFromArticle(article.Author.Username)" class="btn btn-sm btn-outline-secondary">
                                 <i class="ion-plus-round"></i>
                                 &nbsp;
                                 Follow @article.Author.Username
@@ -207,6 +206,8 @@
 
     private bool isCurrentUser;
 
+    private bool isFollowing;
+
     [Parameter]
     public string? ArticleSlug { get; set; }
 
@@ -215,7 +216,6 @@
         await base.OnInitializedAsync();
 
         ArticleState.StateChanged += OnArticleLoaded;
-        ProfileState.StateChanged += OnFollowUnfollowClicked;
 
         if (string.IsNullOrWhiteSpace(ArticleSlug))
         {
@@ -258,17 +258,18 @@
         article = state.CurrentArticle;
         isCurrentUser = IsCurrentUserProfile(state);
 
-        StateHasChanged();
-    }
-
-    private void OnFollowUnfollowClicked(object sender, ProfileState state)
-    {
-        if (article is null)
+        if (state.IsFollowingUser.HasValue)
         {
-            return;
+            isFollowing = state.IsFollowingUser.Value;
         }
-
-        article.Author = state.CurrentProfile;
+        else if (!(state.CurrentArticle is null) && !(state.CurrentArticle.Author is null))
+        {
+            isFollowing = state.CurrentArticle.Author.Following;
+        }
+        else
+        {
+            isFollowing = false;
+        }
 
         StateHasChanged();
     }

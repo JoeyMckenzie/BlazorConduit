@@ -13,7 +13,7 @@ namespace BlazorConduit.Client.Store.Features.Shared.Reducers
         /// <param name="action">Fluxor navigation action issued on each routing call.</param>
         /// <returns>New user state with errors cleared.</returns>
         [ReducerMethod]
-        public static UserState ReduceNavigationGoAction(UserState state, GoAction action) =>
+        public static UserState ReduceNavigationGoAction(UserState state, GoAction _) =>
             new UserState(state.IsLoading, null, state.CurrentUser);
     }
 }
