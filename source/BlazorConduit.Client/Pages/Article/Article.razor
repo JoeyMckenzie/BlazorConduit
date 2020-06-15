@@ -59,7 +59,7 @@
                     @* Favorite button state markup *@
                     @if (article.Favorited)
                     {
-                        <button class="btn btn-sm btn-primary">
+                        <button @onclick="() => StateFacade.UnfavoritePostFromArticle(article.Slug!)" class="btn btn-sm btn-primary">
                             <i class="ion-heart"></i>
                             &nbsp;
                             Unfavorite Post <span class="counter">@article.FavoritesCount</span>
@@ -67,7 +67,7 @@
                     }
                     else
                     {
-                        <button class="btn btn-sm btn-outline-primary">
+                        <button @onclick="() => StateFacade.FavoritePostFromArticle(article.Slug!)" class="btn btn-sm btn-outline-primary">
                             <i class="ion-heart"></i>
                             &nbsp;
                             Favorite Post <span class="counter">@article.FavoritesCount</span>
@@ -129,7 +129,7 @@
                     @* Favorite button state markup *@
                     @if (article.Favorited)
                     {
-                        <button class="btn btn-sm btn-primary">
+                        <button @onclick="() => StateFacade.UnfavoritePostFromArticle(article.Slug!)" class="btn btn-sm btn-primary">
                             <i class="ion-heart"></i>
                             &nbsp;
                             Unfavorite Post <span class="counter">@article.FavoritesCount</span>
@@ -137,7 +137,7 @@
                     }
                     else
                     {
-                        <button class="btn btn-sm btn-outline-primary">
+                        <button @onclick="() => StateFacade.FavoritePostFromArticle(article.Slug!)" class="btn btn-sm btn-outline-primary">
                             <i class="ion-heart"></i>
                             &nbsp;
                             Favorite Post <span class="counter">@article.FavoritesCount</span>

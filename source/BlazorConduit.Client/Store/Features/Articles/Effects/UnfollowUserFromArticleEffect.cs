@@ -8,7 +8,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace BlazorConduit.Client.Store.Features.Articles.Effects.UnfollowUserFromArticle
+namespace BlazorConduit.Client.Store.Features.Articles.Effects
 {
     public class UnfollowUserFromArticleEffect : Effect<UnfollowUserFromArticleAction>
     {

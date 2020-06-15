@@ -13,6 +13,8 @@ using BlazorConduit.Client.Store.Features.Articles.Actions.FollowUserFromArticle
 using BlazorConduit.Client.Store.Features.Articles.Actions.UnfollowUserFromArticle;
 using BlazorConduit.Client.Store.Features.Profiles.Actions.FollowUserFromProfile;
 using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUserFromProfile;
+using BlazorConduit.Client.Store.Features.Articles.Actions.FavoritePostFromArticle;
+using BlazorConduit.Client.Store.Features.Articles.Actions.UnfavoritePostFromArticle;
 
 namespace BlazorConduit.Client.Services
 {
@@ -97,6 +99,18 @@ namespace BlazorConduit.Client.Services
         {
             _logger.LogInformation($"Unfollowing user from article page {username}");
             _dispatcher.Dispatch(new UnfollowUserFromArticleAction(username));
+        }
+
+        public void FavoritePostFromArticle(string slug)
+        {
+            _logger.LogInformation($"Favoriting article {slug}");
+            _dispatcher.Dispatch(new FavoritePostFromArticleAction(slug));
+        }
+
+        public void UnfavoritePostFromArticle(string slug)
+        {
+            _logger.LogInformation($"Unfavoriting article {slug}");
+            _dispatcher.Dispatch(new UnfavoritePostFromArticleAction(slug));
         }
     }
 }
