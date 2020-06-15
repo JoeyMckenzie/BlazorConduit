@@ -1,0 +1,76 @@
+﻿@using BlazorConduit.Client.Models.Articles.Dtos 
+@using BlazorConduit.Client.Services
+
+@inject StateFacade StateFacade
+
+@if (!(Article is null))
+{
+    @if (IsCurrentUser)
+    {
+        <button class="btn btn-sm btn-outline-secondary action-btn">
+            <i class="ion-gear-a"></i>
+            &nbsp;
+            Edit Profile Settings
+        </button>
+        <button class="btn btn-outline-danger btn-sm">
+            <i class="ion-trash-a"></i>
+            &nbsp;
+            Delete Article
+        </button>
+    }
+    else if (!string.IsNullOrWhiteSpace(Article.Author?.Username))
+    {
+        if (IsFollowing)
+        {
+            <button @onclick="() => StateFacade.UnfollowUserFromArticle(Article.Author.Username)" class="btn btn-sm btn-secondary">
+                <i class="ion-minus-round"></i>
+                &nbsp;
+                Unfollow @Article.Author.Username
+            </button>
+        }
+        else
+        {
+            <button @onclick="() => StateFacade.FollowUserFromArticle(Article.Author.Username)" class="btn btn-sm btn-outline-secondary">
+                <i class="ion-plus-round"></i>
+                &nbsp;
+                Follow @Article.Author.Username
+            </button>
+        }
+    }
+
+    <span>&nbsp;&nbsp;</span>
+
+    @* Favorite button state markup *@
+    @if (!IsCurrentUser)
+    {
+        if (Article.Favorited)
+        {
+            <button @onclick="() => StateFacade.UnfavoritePostFromArticle(Article.Slug!)" class="btn btn-sm btn-primary">
+                <i class="ion-heart"></i>
+                &nbsp;
+                Unfavorite Post <span class="counter">@Article.FavoritesCount</span>
+            </button>
+        }
+        else
+        {
+            <button @onclick="() => StateFacade.FavoritePostFromArticle(Article.Slug!)" class="btn btn-sm btn-outline-primary">
+                <i class="ion-heart"></i>
+                &nbsp;
+                Favorite Post <span class="counter">@Article.FavoritesCount</span>
+            </button>
+        }
+    }
+}
+
+@code {
+
+    [Parameter]
+    public bool IsCurrentUser { get; set; }
+
+    [Parameter]
+    public bool IsFollowing { get; set; }
+
+    [Parameter]
+    public ArticleDto? Article { get; set; }
+
+}

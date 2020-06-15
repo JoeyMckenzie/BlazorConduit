@@ -15,6 +15,7 @@ using BlazorConduit.Client.Store.Features.Profiles.Actions.FollowUserFromProfile
 using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUserFromProfile;
 using BlazorConduit.Client.Store.Features.Articles.Actions.FavoritePostFromArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.UnfavoritePostFromArticle;
+using BlazorConduit.Client.Store.Features.Articles.Actions.GetArticles;
 
 namespace BlazorConduit.Client.Services
 {
@@ -87,6 +88,17 @@ namespace BlazorConduit.Client.Services
         {
             _logger.LogInformation($"Retrieving article {slug}");
             _dispatcher.Dispatch(new RetrieveArticleAction(slug));
+        }
+
+        public void GetArticles(
+            string? tag = null,
+            string? author = null,
+            string? favorited = null,
+            int? limit = null,
+            int? offset = null)
+        {
+            _logger.LogInformation("Retrieving articles");
+            _dispatcher.Dispatch(new GetArticlesAction(tag, author, favorited, limit, offset));
         }
 
         public void FollowUserFromArticle(string username)

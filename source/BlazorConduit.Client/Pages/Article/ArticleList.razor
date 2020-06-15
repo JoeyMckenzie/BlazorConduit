@@ -1,0 +1,61 @@
+﻿@using BlazorConduit.Client.Models.Articles.Dtos
+@using BlazorConduit.Client.Models.Profiles
+@using BlazorConduit.Client.Services
+
+@inject StateFacade StateFacade
+
+@if (Articles is null && IsLoading)
+{
+    <span>Loading articles...</span>
+}
+else if (!(Articles is null) && Articles.Any())
+{
+    foreach (var article in Articles)
+    {
+        <div class="article-preview">
+            <div class="article-meta">
+                @if (!(article.Author is null))
+                {
+                    <a href="@GetAuthorProfileUri(article.Author)"><img src="@article.Author.Image" /></a>
+                    <div class="info">
+                        <a href="@GetAuthorProfileUri(article.Author)" class="author">@article.Author.Username</a>
+                        <span class="date">@article.CreatedAt.ToShortDateString()</span>
+                    </div>
+                }
+                <button class="btn btn-outline-primary btn-sm pull-xs-right">
+                    <i class="ion-heart"></i> @article.FavoritesCount
+                </button>
+            </div>
+            <a href="@GetArticleUri(article)" class="preview-link">
+                <h1>@article.Title</h1>
+                <p>@article.Description</p>
+                <span>Read more...</span>
+                @if (!(article.TagList is null) && article.TagList.Any())
+                {
+                    <ul class="tag-list">
+                        @foreach (var tag in article.TagList)
+                        {
+                            <li class="tag-default tag-pill tag-outline">@tag</li>
+                        }
+                    </ul>
+                }
+            </a>
+        </div>
+    }
+}
+
+@code {
+
+    [Parameter]
+    public IEnumerable<ArticleDto>? Articles { get; set; }
+
+    [Parameter]
+    public bool IsLoading { get; set; }
+
+    private string GetAuthorProfileUri(UserProfileDto profile) => 
+        $"/profile/{profile.Username}";
+
+    private string GetArticleUri(ArticleDto article) =>
+        $"/article/{article.Slug}";
+
+}

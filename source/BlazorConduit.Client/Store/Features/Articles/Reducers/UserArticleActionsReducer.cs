@@ -14,59 +14,59 @@ namespace BlazorConduit.Client.Store.Features.Articles.Reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceFollowUserFromArticleAction(ArticleState state, FollowUserFromArticleAction _) =>
-            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser);
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
 
         [ReducerMethod]
         public static ArticleState ReduceFollowUserFromArticleSuccessAction(ArticleState state, FollowUserFromArticleSuccessAction action) =>
-            new ArticleState(false, null, state.CurrentArticle, true);
+            new ArticleState(false, null, state.CurrentArticle, true, state.CurrentArticleList);
 
         [ReducerMethod]
         public static ArticleState ReduceFollowUserFromArticleFailureAction(ArticleState state, FollowUserFromArticleFailureAction action) =>
-            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser);
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
 
         /**
          * Unfollow action reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceUnfollowUserFromArticleAction(ArticleState state, UnfollowUserFromArticleAction _) =>
-            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser);
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
 
         [ReducerMethod]
         public static ArticleState ReduceUnfollowUserFromArticleSuccessAction(ArticleState state, UnfollowUserFromArticleSuccessAction action) =>
-            new ArticleState(false, null, state.CurrentArticle, false);
+            new ArticleState(false, null, state.CurrentArticle, false, state.CurrentArticleList);
 
         [ReducerMethod]
         public static ArticleState ReduceUnfollowUserFromArticleFailureAction(ArticleState state, UnfollowUserFromArticleFailureAction action) =>
-            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser);
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
 
         /**
          * Favorite post action reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceFavoritePostFromArticle(ArticleState state, FavoritePostFromArticleAction _) =>
-            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser);
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
 
         [ReducerMethod]
         public static ArticleState ReduceFavoritePostFromSuccessArticle(ArticleState state, FavoritePostFromArticleSuccessAction action) =>
-            new ArticleState(false, null, action.Article, state.IsFollowingUser);
+            new ArticleState(false, null, action.Article, state.IsFollowingUser, state.CurrentArticleList);
 
         [ReducerMethod]
         public static ArticleState ReduceFavoritePostFromFailureArticle(ArticleState state, FavoritePostFromArticleFailureAction action) =>
-            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser);
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
 
         /**
          * Unfavorite post action reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceUnfavoritePostFromArticle(ArticleState state, UnfavoritePostFromArticleAction _) =>
-            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser);
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
 
         [ReducerMethod]
         public static ArticleState ReduceUnfavoritePostFromSuccessArticle(ArticleState state, UnfavoritePostFromArticleSuccessAction action) =>
-            new ArticleState(false, null, action.Article, state.IsFollowingUser);
+            new ArticleState(false, null, action.Article, state.IsFollowingUser, state.CurrentArticleList);
 
         [ReducerMethod]
         public static ArticleState ReduceUnfavoritePostFromFailureArticle(ArticleState state, UnfavoritePostFromArticleFailureAction action) =>
-            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser);
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
     }
 }
