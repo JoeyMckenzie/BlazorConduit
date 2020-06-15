@@ -38,7 +38,10 @@
                     </ul>
                 </div>
 
-                <ArticleList Articles="ArticleState.Value.CurrentArticleList" IsLoading="ArticleState.Value.IsLoading"/>
+                <ArticleList 
+                        Articles="ArticleState.Value.CurrentArticleList"
+                        MostRecentArticleInteraction="ArticleState.Value.CurrentArticle"
+                        IsLoading="ArticleState.Value.IsLoading" />
 
             </div>
 

@@ -22,9 +22,22 @@ else if (!(Articles is null) && Articles.Any())
                         <span class="date">@article.CreatedAt.ToShortDateString()</span>
                     </div>
                 }
-                <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                    <i class="ion-heart"></i> @article.FavoritesCount
-                </button>
+
+                @if (!string.IsNullOrWhiteSpace(article.Slug))
+                {
+                    if (article.Favorited)
+                    {
+                        <button @onclick="() => StateFacade.UnfavoritePostFromArticle(article.Slug)" class="btn btn-primary btn-sm pull-xs-right">
+                            <i class="ion-heart"></i> @article.FavoritesCount
+                        </button>
+                    }
+                    else
+                    {
+                        <button @onclick="() => StateFacade.FavoritePostFromArticle(article.Slug)" class="btn btn-outline-primary btn-sm pull-xs-right">
+                            <i class="ion-heart"></i> @article.FavoritesCount
+                        </button>
+                    }
+                }
             </div>
             <a href="@GetArticleUri(article)" class="preview-link">
                 <h1>@article.Title</h1>
@@ -43,6 +56,10 @@ else if (!(Articles is null) && Articles.Any())
         </div>
     }
 }
+else
+{
+    <span>No articles are here... yet.</span>
+}
 
 @code {
 
@@ -52,7 +69,34 @@ else if (!(Articles is null) && Articles.Any())
     [Parameter]
     public bool IsLoading { get; set; }
 
-    private string GetAuthorProfileUri(UserProfileDto profile) => 
+    [Parameter]
+    public ArticleDto? MostRecentArticleInteraction { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        // Update the last favorited/unfavorited article in the input list, if available
+        if (!(Articles is null) && !(MostRecentArticleInteraction is null) && Articles.Any())
+        {
+
+            var existingArticle = Articles
+                .FirstOrDefault(a => string.Equals(a.Slug, MostRecentArticleInteraction.Slug, StringComparison.CurrentCultureIgnoreCase));
+
+            if (existingArticle is null)
+            {
+                return;
+            }
+
+            // Set the favorited state, depending on interaction
+            existingArticle.Favorited = MostRecentArticleInteraction.Favorited;
+            existingArticle.FavoritesCount = MostRecentArticleInteraction.FavoritesCount;
+
+            // Re-render the article list
+            StateHasChanged();
+        }
+
+    }
+
+    private string GetAuthorProfileUri(UserProfileDto profile) =>
         $"/profile/{profile.Username}";
 
     private string GetArticleUri(ArticleDto article) =>
