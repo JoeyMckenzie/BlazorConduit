@@ -16,6 +16,8 @@ using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUserFromProfi
 using BlazorConduit.Client.Store.Features.Articles.Actions.FavoritePostFromArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.UnfavoritePostFromArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.GetArticles;
+using BlazorConduit.Client.Models.Articles.Dtos;
+using BlazorConduit.Client.Store.Features.Articles.Actions.UpdateArticle;
 
 namespace BlazorConduit.Client.Services
 {
@@ -88,6 +90,12 @@ namespace BlazorConduit.Client.Services
         {
             _logger.LogInformation($"Retrieving article {slug}");
             _dispatcher.Dispatch(new RetrieveArticleAction(slug));
+        }
+
+        public void UpdateArticle(UpdateArticleDto article)
+        {
+            _logger.LogInformation($"Updating article {article.Slug}");
+            _dispatcher.Dispatch(new UpdateArticleAction(article));
         }
 
         public void GetArticles(

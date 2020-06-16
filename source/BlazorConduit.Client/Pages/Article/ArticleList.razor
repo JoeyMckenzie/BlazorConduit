@@ -1,5 +1,4 @@
 ﻿@using BlazorConduit.Client.Models.Articles.Dtos
-@using BlazorConduit.Client.Models.Profiles
 @using BlazorConduit.Client.Services
 
 @inject StateFacade StateFacade
@@ -39,7 +38,7 @@ else if (!(Articles is null) && Articles.Any())
                     }
                 }
             </div>
-            <a href="@GetArticleUri(article)" class="preview-link">
+            <a style="cursor: pointer;" @onclick="() => StateFacade.RetrieveArticle(article.Slug!)" class="preview-link">
                 <h1>@article.Title</h1>
                 <p>@article.Description</p>
                 <span>Read more...</span>

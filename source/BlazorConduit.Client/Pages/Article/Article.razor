@@ -1,4 +1,6 @@
-﻿@page "/article/{articleSlug}"
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@page "/article/{articleSlug}"
 
 @using BlazorConduit.Client.Models.Articles.Dtos
 @using BlazorConduit.Client.Services 
@@ -26,7 +28,7 @@
                         <span class="date">@article.CreatedAt.ToShortDateString()</span>
                     </div>
 
-                    <ArticleMeta Article="article" IsCurrentUser="isCurrentUser" IsFollowing="isFollowing"/>
+                    <ArticleMeta Article="article" IsFollowing="isFollowing"/>
                 </div>
 
             </div>
@@ -50,7 +52,7 @@
                         <span class="date">@article.CreatedAt.ToShortTimeString()</span>
                     </div>
 
-                    <ArticleMeta Article="article" IsCurrentUser="isCurrentUser" IsFollowing="isFollowing" />
+                    <ArticleMeta Article="article" IsFollowing="isFollowing" />
                 </div>
             </div>
 
@@ -111,8 +113,6 @@
 
     private ArticleDto? article;
 
-    private bool isCurrentUser;
-
     private bool isFollowing;
 
     [Parameter]
@@ -143,27 +143,9 @@
         }
     }
 
-    private bool IsCurrentUserProfile(ArticleState state)
-    {
-        // No profile or current user, default to false
-        if (state.CurrentArticle is null || state.CurrentArticle.Author is null || UserState.Value.CurrentUser is null)
-        {
-            return false;
-        }
-
-        // No profile or user username, default to false
-        if (string.IsNullOrWhiteSpace(state.CurrentArticle.Author.Username) || string.IsNullOrWhiteSpace(UserState.Value.CurrentUser.Username))
-        {
-            return false;
-        }
-
-        return string.Equals(state.CurrentArticle.Author.Username, UserState.Value.CurrentUser.Username);
-    }
-
     private void OnArticleLoaded(object sender, ArticleState state)
     {
         article = state.CurrentArticle;
-        isCurrentUser = IsCurrentUserProfile(state);
 
         if (state.IsFollowingUser.HasValue)
         {

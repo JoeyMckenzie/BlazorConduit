@@ -1,31 +1,111 @@
-﻿@page "/article/edit-post"
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
-<div class="editor-page">
-    <div class="container page">
-        <div class="row">
+@page "/editor/{slug}"
 
-            <div class="col-md-10 offset-md-1 col-xs-12">
-                <form>
-                    <fieldset>
+
+@using BlazorConduit.Client.Models.Articles.Dtos
+@using BlazorConduit.Client.Models.Articles.Validation
+@using BlazorConduit.Client.Services
+@using BlazorConduit.Client.Store.State
+@using Fluxor
+
+@inject StateFacade StateFacade
+@inject IState<ArticleState> State
+@inject NavigationManager Navigation
+
+@if (!(State.Value.CurrentArticle is null))
+{
+    <div class="editor-page">
+        <div class="container page">
+            <div class="row">
+
+                <div class="col-md-10 offset-md-1 col-xs-12">
+                    <CustomValidationForm TState="ArticleState" State="State" ValidationObject="validationModel" SubmitClickedCallback="OnPublishButtonClicked" ButtonText="Publish Article">
                         <fieldset class="form-group">
-                            <input type="text" class="form-control form-control-lg" placeholder="Article Title">
+                            <InputText class="form-control form-control-lg" placeholder="Article Title" @bind-Value="validationModel.Title" />
                         </fieldset>
                         <fieldset class="form-group">
-                            <input type="text" class="form-control" placeholder="What's this article about?">
+                            <InputText class="form-control" placeholder="What's this article about?" @bind-Value="validationModel.Description" />
                         </fieldset>
                         <fieldset class="form-group">
-                            <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)"></textarea>
+                            <InputTextArea class="form-control" rows="8" placeholder="Write your article (in markdown)" @bind-Value="validationModel.Body" />
                         </fieldset>
                         <fieldset class="form-group">
-                            <input type="text" class="form-control" placeholder="Enter tags"><div class="tag-list"></div>
+                            <InputText class="form-control" placeholder="Enter tags" @bind-Value="tagList" /><div class="tag-list"></div>
                         </fieldset>
-                        <button class="btn btn-lg pull-xs-right btn-primary" type="button">
-                            Publish Article
-                        </button>
-                    </fieldset>
-                </form>
+                        @* Display the tag list*@
+                        @if (!(State.Value.CurrentArticle.TagList is null) && State.Value.CurrentArticle.TagList.Any())
+                        {
+                            <div class="tag-list">
+                                @foreach (var tag in State.Value.CurrentArticle.TagList)
+                                {
+                                    <span class="tag-default tag-pill">@tag</span>
+                                }
+                            </div>
+                        }
+                    </CustomValidationForm>
+                </div>
+
             </div>
-
         </div>
     </div>
-</div>
+}
+
+@code {
+
+    private UpdateArticleValidationModel validationModel = new UpdateArticleValidationModel();
+
+    private string? tagList;
+
+    [Parameter]
+    public string? Slug { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Slug))
+        {
+            // If no slug is passed, re-route to create article page
+            Navigation.NavigateTo("/editor");
+            return;
+        }
+
+        await base.OnInitializedAsync();
+
+        // Load the article to edit, if not already in state
+        if (State.Value.CurrentArticle is null)
+        {
+            StateFacade.RetrieveArticle(Slug);
+            State.StateChanged += UpdateEditableFields;
+        }
+        else
+        {
+            SetEditableFieldsIfAvailable(State.Value);
+        }
+    }
+
+    private void OnPublishButtonClicked(bool isValid)
+    {
+        if (isValid && !string.IsNullOrWhiteSpace(Slug))
+        {
+            var updateArticleDto = new UpdateArticleDto(validationModel.Title, validationModel.Description, validationModel.Body, Slug);
+
+            StateFacade.UpdateArticle(updateArticleDto);
+        }
+    }
+
+    private void UpdateEditableFields(object sender, ArticleState state)
+    {
+        SetEditableFieldsIfAvailable(state);
+    }
+
+    private void SetEditableFieldsIfAvailable(ArticleState state)
+    {
+        if (!(state.CurrentArticle is null))
+        {
+            validationModel.Title = state.CurrentArticle.Title;
+            validationModel.Description = state.CurrentArticle.Description;
+            validationModel.Body = state.CurrentArticle.Body;
+        }
+    }
+
+}

@@ -1,16 +1,24 @@
-﻿@using BlazorConduit.Client.Models.Articles.Dtos 
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@using BlazorConduit.Client.Models.Articles.Dtos 
 @using BlazorConduit.Client.Services
+@using BlazorConduit.Client.Store.State
+@using Fluxor 
 
 @inject StateFacade StateFacade
+@inject NavigationManager Navigation
+@inject IState<ArticleState> ArticleState
+@inject IState<UserState> UserState
+
 
 @if (!(Article is null))
 {
-    @if (IsCurrentUser)
+    @if (isCurrentUser)
     {
-        <button class="btn btn-sm btn-outline-secondary action-btn">
+        <button class="btn btn-sm btn-outline-secondary action-btn" @onclick="OnEditArticleClicked">
             <i class="ion-gear-a"></i>
             &nbsp;
-            Edit Profile Settings
+            Edit Article
         </button>
         <button class="btn btn-outline-danger btn-sm">
             <i class="ion-trash-a"></i>
@@ -41,7 +49,7 @@
     <span>&nbsp;&nbsp;</span>
 
     @* Favorite button state markup *@
-    @if (!IsCurrentUser)
+    @if (!isCurrentUser)
     {
         if (Article.Favorited)
         {
@@ -64,13 +72,45 @@
 
 @code {
 
-    [Parameter]
-    public bool IsCurrentUser { get; set; }
+    private bool isCurrentUser;
 
     [Parameter]
     public bool IsFollowing { get; set; }
 
     [Parameter]
     public ArticleDto? Article { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        isCurrentUser = SetCurrentUserState();
+    }
+
+    private void OnEditArticleClicked()
+    {
+        if (!string.IsNullOrWhiteSpace(Article!.Slug))
+        {
+            Navigation.NavigateTo($"editor/{Article.Slug}");
+        }
+    }
+
+    private bool SetCurrentUserState()
+    {
+
+        // No profile or current user, default to false
+        if (ArticleState.Value.CurrentArticle is null || ArticleState.Value.CurrentArticle.Author is null || UserState.Value.CurrentUser is null)
+        {
+            return false;
+        }
+
+        // No profile or user username, default to false
+        if (string.IsNullOrWhiteSpace(ArticleState.Value.CurrentArticle.Author.Username) || string.IsNullOrWhiteSpace(UserState.Value.CurrentUser.Username))
+        {
+            return false;
+        }
+
+        return string.Equals(ArticleState.Value.CurrentArticle.Author.Username, UserState.Value.CurrentUser.Username);
+    }
 
 }
