@@ -146,7 +146,6 @@
     private void OnArticleLoaded(object sender, ArticleState state)
     {
         article = state.CurrentArticle;
-
         if (state.IsFollowingUser.HasValue)
         {
             isFollowing = state.IsFollowingUser.Value;

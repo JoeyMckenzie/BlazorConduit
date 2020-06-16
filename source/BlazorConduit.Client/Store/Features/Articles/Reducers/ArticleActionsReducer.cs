@@ -1,4 +1,5 @@
 ﻿using BlazorConduit.Client.Store.Features.Articles.Actions.CreateArticle;
+using BlazorConduit.Client.Store.Features.Articles.Actions.DeleteArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.GetArticles;
 using BlazorConduit.Client.Store.Features.Articles.Actions.RetrieveArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.UpdateArticle;
@@ -67,6 +68,21 @@ namespace BlazorConduit.Client.Store.Features.Articles.Reducers
 
         [ReducerMethod]
         public static ArticleState ReduceUpdateArticleFailureAction(ArticleState state, UpdateArticleFailureAction action) =>
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
+
+        /**
+         * Delete action reducers
+         */
+        [ReducerMethod]
+        public static ArticleState ReduceDeleteArticleAction(ArticleState state, DeleteArticleAction _) =>
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
+
+        [ReducerMethod]
+        public static ArticleState ReduceDeleteArticleSuccessAction(ArticleState state, DeleteArticleSuccessAction _) =>
+            new ArticleState(false, null, null, state.IsFollowingUser, state.CurrentArticleList);
+
+        [ReducerMethod]
+        public static ArticleState ReduceDeleteArticleFailureAction(ArticleState state, DeleteArticleFailureAction action) =>
             new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
     }
 }

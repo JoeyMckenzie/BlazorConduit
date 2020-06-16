@@ -20,7 +20,7 @@
             &nbsp;
             Edit Article
         </button>
-        <button class="btn btn-outline-danger btn-sm">
+        <button class="btn btn-outline-danger btn-sm" @onclick="() => StateFacade.DeleteArticle(Article.Slug!)">
             <i class="ion-trash-a"></i>
             &nbsp;
             Delete Article

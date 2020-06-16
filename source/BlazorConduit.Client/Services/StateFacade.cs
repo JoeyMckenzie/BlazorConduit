@@ -18,6 +18,7 @@ using BlazorConduit.Client.Store.Features.Articles.Actions.UnfavoritePostFromArt
 using BlazorConduit.Client.Store.Features.Articles.Actions.GetArticles;
 using BlazorConduit.Client.Models.Articles.Dtos;
 using BlazorConduit.Client.Store.Features.Articles.Actions.UpdateArticle;
+using BlazorConduit.Client.Store.Features.Articles.Actions.DeleteArticle;
 
 namespace BlazorConduit.Client.Services
 {
@@ -96,6 +97,12 @@ namespace BlazorConduit.Client.Services
         {
             _logger.LogInformation($"Updating article {article.Slug}");
             _dispatcher.Dispatch(new UpdateArticleAction(article));
+        }
+
+        public void DeleteArticle(string slug)
+        {
+            _logger.LogInformation($"Deleting article {slug}");
+            _dispatcher.Dispatch(new DeleteArticleAction(slug));
         }
 
         public void GetArticles(

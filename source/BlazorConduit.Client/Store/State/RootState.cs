@@ -5,7 +5,7 @@ namespace BlazorConduit.Client.Store.State
 {
     public abstract class RootState
     {
-        public RootState(bool isLoading = false, IEnumerable<string>? errors = null) =>
+        protected RootState(bool isLoading = false, IEnumerable<string>? errors = null) =>
             (IsLoading, CurrentErrors) = (isLoading, errors);
 
         public bool IsLoading { get; }
