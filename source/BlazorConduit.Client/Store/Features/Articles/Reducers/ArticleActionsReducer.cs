@@ -15,74 +15,74 @@ namespace BlazorConduit.Client.Store.Features.Articles.Reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceCreateArticleAction(ArticleState state, CreateArticleAction _) =>
-            new ArticleState(true, null, null, null, state.CurrentArticleList);
+            new ArticleState(true, null, null, null, state.CurrentArticleList, null);
 
         [ReducerMethod]
         public static ArticleState ReduceCreateArticleSuccessAction(ArticleState state, CreateArticleSuccessAction action) =>
-            new ArticleState(false, null, action.Article, null, state.CurrentArticleList);
+            new ArticleState(false, null, action.Article, null, state.CurrentArticleList, null);
 
         [ReducerMethod]
         public static ArticleState ReduceCreateArticleFailureAction(ArticleState state, CreateArticleFailureAction action) =>
-            new ArticleState(false, action.Errors, null, null, state.CurrentArticleList);
+            new ArticleState(false, action.Errors, null, null, state.CurrentArticleList, null);
 
         /*
          * Retrieve action reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceRetieveArticleAction(ArticleState state, RetrieveArticleAction __) =>
-            new ArticleState(true, null, null, null, state.CurrentArticleList);
+            new ArticleState(true, null, null, null, state.CurrentArticleList, null);
 
         [ReducerMethod]
         public static ArticleState ReduceRetrieveArticleSuccessAction(ArticleState state, RetrieveArticleSuccessAction action) =>
-            new ArticleState(false, null, action.Article, null, state.CurrentArticleList);
+            new ArticleState(false, null, action.Article, null, state.CurrentArticleList, state.CurrentCommentList);
 
         [ReducerMethod]
         public static ArticleState ReduceRetrieveArticleFailureAction(ArticleState state, RetrieveArticleFailureAction action) =>
-            new ArticleState(false, action.Errors, null, null, state.CurrentArticleList);
+            new ArticleState(false, action.Errors, null, null, state.CurrentArticleList, null);
 
         /**
          * Get action reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceGetArticlesAction(ArticleState state, GetArticlesAction _) =>
-            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, null);
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, null, state.CurrentCommentList);
 
         [ReducerMethod]
         public static ArticleState ReduceGetArticlesSuccessAction(ArticleState state, GetArticlesSuccessAction action) =>
-            new ArticleState(false, null, state.CurrentArticle, state.IsFollowingUser, action.Articles);
+            new ArticleState(false, null, state.CurrentArticle, state.IsFollowingUser, action.Articles, state.CurrentCommentList);
 
         [ReducerMethod]
         public static ArticleState ReduceGetArticlesFailureAction(ArticleState state, GetArticlesFailureAction action) =>
-            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
 
         /**
          * Update action reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceUpdateArticleAction(ArticleState state, UpdateArticleAction _) =>
-            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
 
         [ReducerMethod]
         public static ArticleState ReduceUpdateArticleSuccessAction(ArticleState state, UpdateArticleSuccessAction action) =>
-            new ArticleState(false, null, action.Article, state.IsFollowingUser, state.CurrentArticleList);
+            new ArticleState(false, null, action.Article, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
 
         [ReducerMethod]
         public static ArticleState ReduceUpdateArticleFailureAction(ArticleState state, UpdateArticleFailureAction action) =>
-            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
 
         /**
          * Delete action reducers
          */
         [ReducerMethod]
         public static ArticleState ReduceDeleteArticleAction(ArticleState state, DeleteArticleAction _) =>
-            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
 
         [ReducerMethod]
         public static ArticleState ReduceDeleteArticleSuccessAction(ArticleState state, DeleteArticleSuccessAction _) =>
-            new ArticleState(false, null, null, state.IsFollowingUser, state.CurrentArticleList);
+            new ArticleState(false, null, null, state.IsFollowingUser, state.CurrentArticleList, null);
 
         [ReducerMethod]
         public static ArticleState ReduceDeleteArticleFailureAction(ArticleState state, DeleteArticleFailureAction action) =>
-            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList);
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
     }
 }

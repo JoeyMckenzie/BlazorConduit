@@ -8,6 +8,6 @@ namespace BlazorConduit.Client.Store.Features.Articles
         public override string GetName() => "Articles";
 
         protected override ArticleState GetInitialState() =>
-            new ArticleState(false, null, null, null, null);
+            new ArticleState(false, null, null, null, null, null);
     }
 }
