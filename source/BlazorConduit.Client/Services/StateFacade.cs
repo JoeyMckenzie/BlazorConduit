@@ -101,6 +101,17 @@ namespace BlazorConduit.Client.Services
             _dispatcher.Dispatch(new GetArticlesAction(tag, author, favorited, limit, offset));
         }
 
+        public void GetFeed(
+            string? tag = null,
+            string? author = null,
+            string? favorited = null,
+            int? limit = null,
+            int? offset = null)
+        {
+            _logger.LogInformation("Retrieving articles");
+            _dispatcher.Dispatch(new GetArticlesAction(tag, author, favorited, limit, offset, true));
+        }
+
         public void FollowUserFromArticle(string username)
         {
             _logger.LogInformation($"Following user from article page {username}");

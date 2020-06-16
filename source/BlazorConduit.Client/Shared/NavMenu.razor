@@ -18,7 +18,7 @@
                     Home
                 </NavLink>
             </li>
-            @if (State.Value.IsAuthenticated || !string.IsNullOrWhiteSpace(existingUsername))
+            @if (State.Value.IsAuthenticated && !string.IsNullOrWhiteSpace(existingUsername))
             {
                 <li class="nav-item">
                     <NavLink class="nav-link" href="/article/create-post">
@@ -33,7 +33,7 @@
                     </NavLink>
                 </li>
                 <li style="cursor: pointer;" class="nav-item">
-                    <NavLink class="nav-link" href="@profileNavigationUrl">
+                    <NavLink class="nav-link" @onclick="() => StateFacade.GetUserProfile(existingUsername)">
                         <img class="user-pic" src="@State.Value.CurrentUser?.Image" />
                         @existingUsername
                     </NavLink>

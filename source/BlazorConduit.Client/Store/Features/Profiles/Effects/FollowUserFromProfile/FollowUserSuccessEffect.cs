@@ -4,13 +4,13 @@ using Fluxor;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
-namespace BlazorConduit.Client.Store.Features.Profiles.Effects.FollowUser
+namespace BlazorConduit.Client.Store.Features.Profiles.Effects.FollowUserFromProfile
 {
     public class FollowUserSuccessEffect : Effect<FollowUserFromProfileSuccessAction>
     {
         private readonly ILogger<FollowUserSuccessEffect> _logger;
 
-        public FollowUserSuccessEffect(ILogger<FollowUserSuccessEffect> logger) => 
+        public FollowUserSuccessEffect(ILogger<FollowUserSuccessEffect> logger) =>
             _logger = logger;
 
         protected override Task HandleAsync(FollowUserFromProfileSuccessAction action, IDispatcher dispatcher)

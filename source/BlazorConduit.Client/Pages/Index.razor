@@ -2,10 +2,11 @@
 
 @page "/"
 
-@using BlazorConduit.Client.Pages.Article 
-@using BlazorConduit.Client.Services 
+@using BlazorConduit.Client.Models.Common
+@using BlazorConduit.Client.Pages.Article
+@using BlazorConduit.Client.Services
 @using BlazorConduit.Client.Store.State
-@using Fluxor 
+@using Fluxor
 
 @inject StateFacade StateFacade
 @inject IState<ArticleState> ArticleState
@@ -26,22 +27,36 @@
             <div class="col-md-9">
                 <div class="feed-toggle">
                     <ul class="nav nav-pills outline-active">
-                        @if (UserState.Value.IsAuthenticated)
+                        @if (feedContext == UserProfileInteractionContext.Feed && UserState.Value.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link disabled" href="">Your Feed</a>
+                            <li class="nav-item" style="cursor: pointer;">
+                                <a class="nav-link active">Your Feed</a>
+                            </li>
+                            <li class="nav-item" style="cursor: pointer;">
+                                <a class="nav-link" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Global)">Favorited Articles</a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link active" href="">Global Feed</a>
-                        </li>
+                        else if (UserState.Value.IsAuthenticated)
+                        {
+                            <li class="nav-item" style="cursor: pointer;">
+                                <a class="nav-link" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Feed)">Your Feed</a>
+                            </li>
+                            <li class="nav-item" style="cursor: pointer;">
+                                <a class="nav-link active">Global Feed</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item" style="cursor: pointer;">
+                                <a class="nav-link" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Global)">Favorited Articles</a>
+                            </li>
+                        }
                     </ul>
                 </div>
 
-                <ArticleList 
-                        Articles="ArticleState.Value.CurrentArticleList"
-                        MostRecentArticleInteraction="ArticleState.Value.CurrentArticle"
-                        IsLoading="ArticleState.Value.IsLoading" />
+                <ArticleList Articles="ArticleState.Value.CurrentArticleList"
+                             MostRecentArticleInteraction="ArticleState.Value.CurrentArticle"
+                             IsLoading="ArticleState.Value.IsLoading" />
 
             </div>
 
@@ -68,14 +83,32 @@
 
 </div>
 
-@code {        
+@code {
+
+    private UserProfileInteractionContext feedContext;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
         // Load the global article feed
+        feedContext = UserProfileInteractionContext.Global;
         StateFacade.GetArticles(limit: 10, offset: 0);
+    }
+
+    private void OnFeedArticleClicked(UserProfileInteractionContext context)
+    {
+        switch (context)
+        {
+            case UserProfileInteractionContext.Global:
+                StateFacade.GetArticles(limit: 10, offset: 0);
+                feedContext = UserProfileInteractionContext.Global;
+                break;
+            default:
+                StateFacade.GetFeed(limit: 10, offset: 0);
+                feedContext = UserProfileInteractionContext.Feed;
+                break;
+        }
     }
 
 }

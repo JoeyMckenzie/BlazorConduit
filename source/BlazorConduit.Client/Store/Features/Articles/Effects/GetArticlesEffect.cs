@@ -59,7 +59,7 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects
             try
             {
                 // Build the aggregated query string
-                var constructedQueryString = QueryHelpers.AddQueryString("articles", queryString);
+                var constructedQueryString = QueryHelpers.AddQueryString(action.IsFeed ? "articles/feed" : "articles", queryString);
 
                 // Call the profile user endpoint with the username
                 var articlesResponse = await _apiService.GetAsync<ArticleViewModelList>(constructedQueryString, await _tokenService.GetTokenAsync());

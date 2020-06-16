@@ -16,9 +16,9 @@ else if (!(Articles is null) && Articles.Any())
             <div class="article-meta">
                 @if (!(article.Author is null))
                 {
-                    <a href="@GetAuthorProfileUri(article.Author)"><img src="@article.Author.Image" /></a>
+                    <a style="cursor: pointer;" @onclick="() => StateFacade.GetUserProfile(article.Author.Username!)"><img src="@article.Author.Image" /></a>
                     <div class="info">
-                        <a href="@GetAuthorProfileUri(article.Author)" class="author">@article.Author.Username</a>
+                        <a style="cursor: pointer;" @onclick="() => StateFacade.GetUserProfile(article.Author.Username!)" class="author">@article.Author.Username</a>
                         <span class="date">@article.CreatedAt.ToShortDateString()</span>
                     </div>
                 }
@@ -95,9 +95,6 @@ else
         }
 
     }
-
-    private string GetAuthorProfileUri(UserProfileDto profile) =>
-        $"/profile/{profile.Username}";
 
     private string GetArticleUri(ArticleDto article) =>
         $"/article/{article.Slug}";

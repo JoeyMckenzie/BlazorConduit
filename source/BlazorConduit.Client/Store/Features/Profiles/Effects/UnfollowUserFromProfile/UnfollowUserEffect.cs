@@ -9,7 +9,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace BlazorConduit.Client.Store.Features.Profiles.Effects.UnfollowUser
+namespace BlazorConduit.Client.Store.Features.Profiles.Effects.UnfollowUserFromProfile
 {
     public class UnfollowUserEffect : Effect<UnfollowUserFromProfileAction>
     {

@@ -7,13 +7,15 @@
             string? author,
             string? favorited,
             int? limit,
-            int? offset)
+            int? offset,
+            bool isFeed = false)
         {
             Tag = tag;
             Author = author;
             Favorited = favorited;
             Limit = limit;
             Offset = offset;
+            IsFeed = isFeed;
         }
 
         public string? Tag { get; set; }
@@ -25,5 +27,7 @@
         public int? Limit { get; set; }
 
         public int? Offset { get; set; }
+
+        public bool IsFeed { get; }
     }
 }

@@ -2,6 +2,7 @@
 
 @page "/profile/{username}"
 
+@using BlazorConduit.Client.Models.Common
 @using BlazorConduit.Client.Models.Profiles
 @using BlazorConduit.Client.Pages.Article
 @using BlazorConduit.Client.Services
@@ -14,7 +15,11 @@
 @inject StateFacade StateFacade
 @inject NavigationManager Navigation
 
-@if (!(userProfile is null))
+@if (ProfileState.Value.IsLoading)
+{
+    <span>Loading profile...</span>
+}
+else if (!(userProfile is null))
 {
     <div class="profile-page">
 
@@ -94,14 +99,6 @@
 }
 
 @code {        
-
-    private enum UserProfileInteractionContext
-    {
-        Follow,
-        Unfollow,
-        Favorited,
-        Authored
-    };
 
     private UserProfileDto? userProfile;
 

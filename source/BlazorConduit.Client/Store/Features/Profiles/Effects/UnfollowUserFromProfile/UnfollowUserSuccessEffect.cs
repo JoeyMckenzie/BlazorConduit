@@ -4,7 +4,7 @@ using Fluxor;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
-namespace BlazorConduit.Client.Store.Features.Profiles.Effects.UnfollowUser
+namespace BlazorConduit.Client.Store.Features.Profiles.Effects.UnfollowUserFromProfile
 {
     public class UnfollowUserSuccessEffect : Effect<UnfollowUserFromProfileSuccessAction>
     {
