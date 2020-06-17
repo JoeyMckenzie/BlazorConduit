@@ -21,6 +21,7 @@ using BlazorConduit.Client.Store.Features.Articles.Actions.UpdateArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.DeleteArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.AddComment;
 using BlazorConduit.Client.Store.Features.Articles.Actions.DeleteComment;
+using BlazorConduit.Client.Store.Features.Tags.Actions.GetTags;
 
 namespace BlazorConduit.Client.Services
 {
@@ -127,7 +128,8 @@ namespace BlazorConduit.Client.Services
             int? offset = null)
         {
             _logger.LogInformation("Retrieving articles");
-            _dispatcher.Dispatch(new GetArticlesAction(tag, author, favorited, limit, offset));
+            var searchRequest = new ArticleSearchRequest(limit.GetValueOrDefault(10), offset.GetValueOrDefault(0), author, favorited, tag);
+            _dispatcher.Dispatch(new GetArticlesAction(searchRequest));
         }
 
         public void GetFeed(
@@ -138,7 +140,8 @@ namespace BlazorConduit.Client.Services
             int? offset = null)
         {
             _logger.LogInformation("Retrieving articles");
-            _dispatcher.Dispatch(new GetArticlesAction(tag, author, favorited, limit, offset, true));
+            var searchRequest = new ArticleSearchRequest(limit.GetValueOrDefault(10), offset.GetValueOrDefault(0), author, favorited, tag);
+            _dispatcher.Dispatch(new GetArticlesAction(searchRequest, true));
         }
 
         public void FollowUserFromArticle(string username)
@@ -163,6 +166,15 @@ namespace BlazorConduit.Client.Services
         {
             _logger.LogInformation($"Unfavoriting article {slug}");
             _dispatcher.Dispatch(new UnfavoritePostFromArticleAction(slug));
+        }
+
+        /**
+         * Tag actions
+         */
+        public void LoadTags()
+        {
+            _logger.LogInformation("Loading tags from API");
+            _dispatcher.Dispatch(new GetTagsAction());
         }
     }
 }

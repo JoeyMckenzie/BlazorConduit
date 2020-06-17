@@ -6,5 +6,7 @@ namespace BlazorConduit.Client.Models.Articles.ViewModels
     public class ArticleViewModelList
     {
         public IEnumerable<ArticleDto>? Articles { get; set; }
+
+        public int ArticlesCount { get; set; }
     }
 }

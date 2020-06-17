@@ -27,34 +27,26 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects
             var queryString = new Dictionary<string, string>();
 
             // Add tag, if available
-            if (!string.IsNullOrWhiteSpace(action.Tag))
+            if (!string.IsNullOrWhiteSpace(action.SearchRequest.Tag))
             {
-                queryString.Add(nameof(action.Tag), action.Tag);
+                queryString.Add("tag", action.SearchRequest.Tag);
             }
 
             // Add author, if available
-            if (!string.IsNullOrWhiteSpace(action.Author))
+            if (!string.IsNullOrWhiteSpace(action.SearchRequest.Author))
             {
-                queryString.Add(nameof(action.Author), action.Author);
+                queryString.Add("author", action.SearchRequest.Author);
             }
 
             // Add favorited, if available
-            if (!string.IsNullOrWhiteSpace(action.Favorited))
+            if (!string.IsNullOrWhiteSpace(action.SearchRequest.Favorited))
             {
-                queryString.Add(nameof(action.Favorited), action.Favorited);
+                queryString.Add("favorited", action.SearchRequest.Favorited);
             }
 
-            // Add limit, if available
-            if (action.Limit.HasValue)
-            {
-                queryString.Add(nameof(action.Limit), action.Limit.Value.ToString());
-            }
-
-            // Add offset, if available
-            if (action.Offset.HasValue)
-            {
-                queryString.Add(nameof(action.Offset), action.Offset.Value.ToString());
-            }
+            // Add limit and offset defaults
+            queryString.Add("limit", action.SearchRequest.Limit.ToString());
+            queryString.Add("offset", action.SearchRequest.Offset.ToString());
 
             try
             {
@@ -70,7 +62,7 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects
                     throw new ConduitApiException($"Could not retireve articles for query {constructedQueryString}", HttpStatusCode.InternalServerError);
                 }
 
-                dispatcher.Dispatch(new GetArticlesSuccessAction(articlesResponse.Articles));
+                dispatcher.Dispatch(new GetArticlesSuccessAction(articlesResponse.Articles, articlesResponse.ArticlesCount));
             }
             catch (ConduitApiException e)
             {

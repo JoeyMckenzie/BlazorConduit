@@ -1,7 +1,12 @@
-﻿@using BlazorConduit.Client.Models.Articles.Dtos
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@using BlazorConduit.Client.Models.Articles.Dtos
 @using BlazorConduit.Client.Services
+@using BlazorConduit.Client.Store.State
+@using Fluxor
 
 @inject StateFacade StateFacade
+@inject IState<ArticleState> ArticleState
 
 @if (Articles is null && IsLoading)
 {
@@ -54,6 +59,33 @@ else if (!(Articles is null) && Articles.Any())
             </a>
         </div>
     }
+
+    @* Article Pagination *@
+    @if (!(ArticleState.Value.CurrentSearchRequest is null) && ArticleState.Value.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination">
+                @for (var pageNumber = 1; pageNumber <= ArticleState.Value.TotalPages; pageNumber++)
+                {
+                    var page = pageNumber;
+
+                    if (pageNumber == ArticleState.Value.CurrentSearchRequest.Offset + 1)
+                    {
+                        <li class="page-item active cursor-pointer">
+                            <a class="page-link">@pageNumber</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item cursor-pointer" @onclick="() => OnPageSelected(page)">
+                            <a class="page-link">@pageNumber</a>
+                        </li>
+                    }
+                }
+            </ul>
+        </nav>
+    }
+
 }
 else
 {
@@ -70,6 +102,11 @@ else
 
     [Parameter]
     public ArticleDto? MostRecentArticleInteraction { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
 
     protected override void OnParametersSet()
     {
@@ -93,6 +130,23 @@ else
             StateHasChanged();
         }
 
+    }
+
+    private void OnPageSelected(int page)
+    {
+        if (ArticleState.Value.CurrentSearchRequest is null)
+        {
+            StateFacade.GetArticles(limit: 10, offset: page);
+        }
+        else
+        {
+            StateFacade.GetArticles(
+                tag: ArticleState.Value.CurrentSearchRequest.Tag,
+                author: ArticleState.Value.CurrentSearchRequest.Author,
+                favorited: ArticleState.Value.CurrentSearchRequest.Favorited,
+                limit: 10,
+                offset: page - 1);
+        }
     }
 
     private string GetArticleUri(ArticleDto article) =>
