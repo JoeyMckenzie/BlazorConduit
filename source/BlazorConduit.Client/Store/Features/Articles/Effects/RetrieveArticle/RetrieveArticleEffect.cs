@@ -32,7 +32,7 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects.RetrieveArticle
                     throw new ConduitApiException("Could not retrieve article", HttpStatusCode.NotFound);
                 }
 
-                dispatcher.Dispatch(new RetrieveArticleSuccessAction(retrieveResponse.Article));
+                dispatcher.Dispatch(new RetrieveArticleSuccessAction(retrieveResponse.Article, action.LoadComments));
             }
             catch (ConduitApiException e)
             {

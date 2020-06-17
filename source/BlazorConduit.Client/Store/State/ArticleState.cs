@@ -12,7 +12,7 @@ namespace BlazorConduit.Client.Store.State
             ArticleDto? currentArticle,
             bool? isFollowingUser,
             IEnumerable<ArticleDto>? currentArticleList,
-            CommentViewModelList? currentCommentList)
+            IEnumerable<CommentDto>? currentCommentList)
             : base(isLoading, errors)
         {
             CurrentArticle = currentArticle;
@@ -27,6 +27,6 @@ namespace BlazorConduit.Client.Store.State
 
         public IEnumerable<ArticleDto>? CurrentArticleList { get; }
 
-        public CommentViewModelList? CurrentCommentList { get; }
+        public IEnumerable<CommentDto>? CurrentCommentList { get; }
     }
 }

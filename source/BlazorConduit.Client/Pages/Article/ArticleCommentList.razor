@@ -1,5 +1,94 @@
-﻿<h3>ArticleCommentList</h3>
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@using BlazorConduit.Client.Models.Articles.Dtos
+@using BlazorConduit.Client.Models.Articles.Requests
+@using BlazorConduit.Client.Services 
+@using BlazorConduit.Client.Store.State
+@using Fluxor
+
+@inject StateFacade StateFacade
+@inject IState<UserState> UserState
+
+<div class="col-xs-12 col-md-8 offset-md-2">
+    <div class="card comment-form">
+        <div class="card-block">
+            <textarea @bind="commentText" class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+        </div>
+        <div class="card-footer">
+            <img src="@UserState.Value.CurrentUser?.Image" class="comment-author-img" />
+            <button class="btn btn-sm btn-primary" @onclick="OnPostCommentClicked">
+                Post Comment
+            </button>
+        </div>
+    </div>
+
+    @if (!(Comments is null) && Comments.Any())
+    {
+        @foreach (var comment in Comments)
+        {
+            <div class="card">
+                <div class="card-block">
+                    <p class="card-text">@comment.Body</p>
+                </div>
+                <div class="card-footer">
+                    @if (!(comment.Author is null))
+                    {
+                        <a style="cursor: pointer;" @onclick="() => StateFacade.GetUserProfile(comment.Author.Username!)" class="comment-author">
+                            <img src="@comment.Author.Image" class="comment-author-img" />
+                        </a>
+                        <span>&nbsp;</span>
+                        <a style="cursor: pointer;" @onclick="() => StateFacade.GetUserProfile(comment.Author.Username!)" class="comment-author">@comment.Author.Username</a>
+                        <span class="date-posted">@comment.CreatedAt.ToShortDateString()</span>
+
+                        @* Render the delete comment button if it's the current user's comment *@
+                        @if (UserState.Value.IsAuthenticated && string.Equals(UserState.Value.CurrentUser!.Username, comment.Author.Username, StringComparison.CurrentCulture))
+                        {
+                            <span @onclick="() => StateFacade.DeleteComment(comment.Id, Slug!)" class="mod-options">
+                                <i class="ion-trash-a"></i>
+                            </span>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>
 
 @code {
+
+    private string? commentText;
+
+    [Parameter]
+    public IEnumerable<CommentDto>? Comments { get; set; }
+
+    [Parameter]
+    public string? Slug { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Slug))
+        {
+            throw new ArgumentNullException(nameof(Slug));
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+    // When the comment list is re-rendered, clear the input text
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrWhiteSpace(commentText))
+        {
+            commentText = null;
+        }
+    }
+
+    private void OnPostCommentClicked()
+    {
+        var createCommentDto = new CreateCommentDto(commentText!);
+        var createCommentRequest = new CreateCommentRequest(createCommentDto);
+
+        StateFacade.AddComment(createCommentRequest, Slug!);
+    }
 
 }

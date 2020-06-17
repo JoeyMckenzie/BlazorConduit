@@ -1,10 +1,16 @@
-﻿using BlazorConduit.Client.Store.Features.Articles.Actions.CreateArticle;
+﻿using BlazorConduit.Client.Models.Articles.Dtos;
+using BlazorConduit.Client.Store.Features.Articles.Actions.AddComment;
+using BlazorConduit.Client.Store.Features.Articles.Actions.CreateArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.DeleteArticle;
+using BlazorConduit.Client.Store.Features.Articles.Actions.DeleteComment;
 using BlazorConduit.Client.Store.Features.Articles.Actions.GetArticles;
+using BlazorConduit.Client.Store.Features.Articles.Actions.LoadComments;
 using BlazorConduit.Client.Store.Features.Articles.Actions.RetrieveArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.UpdateArticle;
 using BlazorConduit.Client.Store.State;
 using Fluxor;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BlazorConduit.Client.Store.Features.Articles.Reducers
 {
@@ -83,6 +89,75 @@ namespace BlazorConduit.Client.Store.Features.Articles.Reducers
 
         [ReducerMethod]
         public static ArticleState ReduceDeleteArticleFailureAction(ArticleState state, DeleteArticleFailureAction action) =>
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
+
+        /**
+         * Load comments action reducers
+         */
+        [ReducerMethod]
+        public static ArticleState ReduceLoadCommentsAction(ArticleState state, LoadCommentsAction _) =>
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, null);
+
+        [ReducerMethod]
+        public static ArticleState ReduceLoadCommentsSuccessAction(ArticleState state, LoadCommentsSuccessAction action) =>
+            new ArticleState(false, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, action.Comments);
+
+        [ReducerMethod]
+        public static ArticleState ReduceLoadCommentsFailureAction(ArticleState state, LoadCommentsFailureAction action) =>
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, null);
+
+        /**
+         * Add comment action reducers
+         */
+        [ReducerMethod]
+        public static ArticleState ReduceAddCommentAction(ArticleState state, AddCommentAction _) =>
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
+
+        [ReducerMethod]
+        public static ArticleState ReduceAddCommentSuccessAction(ArticleState state, AddCommentSuccessAction action)
+        {
+            // Grab a reference to the current comment list, initialize if not available
+            var currentComments = state.CurrentCommentList is null ? 
+                new List<CommentDto>() :
+                state.CurrentCommentList.ToList();
+
+            // Add and order by date if there are more than one comment
+            currentComments.Add(action.Comment);
+            currentComments = currentComments.OrderByDescending(c => c.CreatedAt).ToList();
+
+            return new ArticleState(false, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, currentComments);
+        }
+
+        [ReducerMethod]
+        public static ArticleState ReduceAddCommentFailureAction(ArticleState state, AddCommentFailureAction action) =>
+            new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
+
+        /**
+         * Delete comment action reducers
+         */
+        [ReducerMethod]
+        public static ArticleState ReduceDeleteArticleState(ArticleState state, DeleteCommentAction _) =>
+            new ArticleState(true, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
+
+        [ReducerMethod]
+        public static ArticleState ReduceDeleteCommentSuccessAction(ArticleState state, DeleteCommentSuccessAction action)
+        {
+            // In theory, this should never happen
+            if (state.CurrentCommentList is null)
+            {
+                return new ArticleState(false, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, null);
+            }
+
+            // Remove the comment and reorder the list
+            var updatedCommentList = state.CurrentCommentList
+                .Where(c => c.Id != action.Id)
+                .OrderByDescending(c => c.CreatedAt);
+
+            return new ArticleState(false, null, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, updatedCommentList);
+        }
+
+        [ReducerMethod]
+        public static ArticleState ReduceDeleteCommentFailureAction(ArticleState state, DeleteCommentFailureAction action) =>
             new ArticleState(false, action.Errors, state.CurrentArticle, state.IsFollowingUser, state.CurrentArticleList, state.CurrentCommentList);
     }
 }

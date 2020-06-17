@@ -19,6 +19,8 @@ using BlazorConduit.Client.Store.Features.Articles.Actions.GetArticles;
 using BlazorConduit.Client.Models.Articles.Dtos;
 using BlazorConduit.Client.Store.Features.Articles.Actions.UpdateArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.DeleteArticle;
+using BlazorConduit.Client.Store.Features.Articles.Actions.AddComment;
+using BlazorConduit.Client.Store.Features.Articles.Actions.DeleteComment;
 
 namespace BlazorConduit.Client.Services
 {
@@ -87,10 +89,10 @@ namespace BlazorConduit.Client.Services
             _dispatcher.Dispatch(new CreateArticleAction(request));
         }
 
-        public void RetrieveArticle(string slug)
+        public void RetrieveArticle(string slug, bool loadComments = true)
         {
             _logger.LogInformation($"Retrieving article {slug}");
-            _dispatcher.Dispatch(new RetrieveArticleAction(slug));
+            _dispatcher.Dispatch(new RetrieveArticleAction(slug, loadComments));
         }
 
         public void UpdateArticle(UpdateArticleDto article)
@@ -103,6 +105,18 @@ namespace BlazorConduit.Client.Services
         {
             _logger.LogInformation($"Deleting article {slug}");
             _dispatcher.Dispatch(new DeleteArticleAction(slug));
+        }
+
+        public void AddComment(CreateCommentRequest comment, string slug)
+        {
+            _logger.LogInformation($"Adding comment to article {slug}");
+            _dispatcher.Dispatch(new AddCommentAction(comment, slug));
+        }
+
+        public void DeleteComment(int id, string slug)
+        {
+            _logger.LogInformation($"Removing comment ID {id} from article {slug}");
+            _dispatcher.Dispatch(new DeleteCommentAction(id, slug));
         }
 
         public void GetArticles(
