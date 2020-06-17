@@ -61,11 +61,11 @@ else if (!(Articles is null) && Articles.Any())
     }
 
     @* Article Pagination *@
-    @if (!(ArticleState.Value.CurrentSearchRequest is null) && ArticleState.Value.TotalPages > 1)
+    @if (!(ArticleState.Value.CurrentSearchRequest is null) && totalPages > 1)
     {
         <nav>
             <ul class="pagination">
-                @for (var pageNumber = 1; pageNumber <= ArticleState.Value.TotalPages; pageNumber++)
+                @for (var pageNumber = 1; pageNumber <= totalPages; pageNumber++)
                 {
                     var page = pageNumber;
 
@@ -94,6 +94,8 @@ else
 
 @code {
 
+    private int totalPages;
+
     [Parameter]
     public IEnumerable<ArticleDto>? Articles { get; set; }
 
@@ -103,9 +105,14 @@ else
     [Parameter]
     public ArticleDto? MostRecentArticleInteraction { get; set; }
 
+    [Parameter]
+    public int PageLimit { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+
+        ArticleState.StateChanged += UpdatePagination;
     }
 
     protected override void OnParametersSet()
@@ -129,7 +136,6 @@ else
             // Re-render the article list
             StateHasChanged();
         }
-
     }
 
     private void OnPageSelected(int page)
@@ -147,6 +153,13 @@ else
                 limit: 10,
                 offset: page - 1);
         }
+    }
+
+    private void UpdatePagination(object sender, ArticleState state)
+    {
+        totalPages = state.TotalArticles / PageLimit + 1;
+
+        StateHasChanged();
     }
 
     private string GetArticleUri(ArticleDto article) =>
