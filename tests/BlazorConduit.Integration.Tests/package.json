@@ -1,0 +1,13 @@
+{
+  "name": "blazorconduit.integration.tests",
+  "version": "1.0.0",
+  "description": "Integration tests for the Conduit Blazor project",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^4.8.0"
+  }
+}

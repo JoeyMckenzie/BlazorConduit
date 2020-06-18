@@ -22,4 +22,4 @@ logs/
 /.editorconfig
 *.csproj.user
 *.DotSettings.user
-node_modules/S
+node_modules/

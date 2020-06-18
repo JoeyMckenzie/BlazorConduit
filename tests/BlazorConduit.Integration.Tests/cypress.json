@@ -1,0 +1,11 @@
+{
+  "baseUrl": "https://localhost:5001",
+  "defaultCommandTimeout": 15000,
+  "env": {
+    "apiUrl": "https://conduit.productionready.io/api",
+    "email": "joey.test4@gmail.com",
+    "password": "test12345",
+    "username": "JoeyTest4",
+    "token": "token"    
+  }
+}
