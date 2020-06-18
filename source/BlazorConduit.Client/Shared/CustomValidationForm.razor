@@ -7,29 +7,26 @@
         Bit of a hack, but alas, my StackOverflow skills were overcome when searching on how
         override the custom CSS for the <ValidationSummary /> component. This does the job for now.
     *@
-    @if (State!.Value.HasCurrentErrors)
-    {
-        <ul class="error-messages">
-            @* Display any validation errors *@
-            @if (!(EditContext is null))
+    <ul class="error-messages">
+        @* Display any validation errors *@
+        @if (!(EditContext is null) && !IsValid)
+        {
+            @foreach (var errorMessage in EditContext.GetValidationMessages())
             {
-                @foreach (var errorMessage in EditContext.GetValidationMessages())
-                {
-                    <li>@errorMessage</li>
-                }
+                <li>@errorMessage</li>
             }
+        }
 
-            @* Display any errors returned from the API response *@
-            @if (!(State is null) && State.Value.HasCurrentErrors)
+        @* Display any errors returned from the API response *@
+        @if (!(State is null) && State.Value.HasCurrentErrors)
+        {
+            @* Let the compiler know we have current errors since it is a nullable field, and already null checked with HasCurrentErrors *@
+            @foreach (var error in State.Value.CurrentErrors!)
             {
-                @* Let the compiler know we have current errors since it is a nullable field, and already null checked with HasCurrentErrors *@
-                @foreach (var error in State.Value.CurrentErrors!)
-                {
-                    <li>@error</li>
-                }
+                <li>@error</li>
             }
-        </ul>
-    }
+        }
+    </ul>
 
     <fieldset>
         @ChildContent

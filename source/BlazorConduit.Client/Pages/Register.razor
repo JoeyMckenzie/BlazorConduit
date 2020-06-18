@@ -24,13 +24,13 @@
 
                 <CustomValidationForm TState="UserState" State="State" ValidationObject="validationModel" ButtonText="Sign up" SubmitClickedCallback="OnSignUpClicked">
                     <fieldset class="form-group">
-                        <InputText class="form-control form-control-lg" placeholder="Your Name" @bind-Value="validationModel.Username" />
+                        <InputText id='register-username-field' class="form-control form-control-lg" placeholder="Your Name" @bind-Value="validationModel.Username" />
                     </fieldset>
                     <fieldset class="form-group">
-                        <InputText class="form-control form-control-lg" placeholder="Email" @bind-Value="validationModel.Email" />
+                        <InputText id='register-email-field' class="form-control form-control-lg" placeholder="Email" @bind-Value="validationModel.Email" />
                     </fieldset>
                     <fieldset class="form-group">
-                        <InputText class="form-control form-control-lg" placeholder="Password" type="password" @bind-Value="validationModel.Password" />
+                        <InputText id='register-password-field' class="form-control form-control-lg" placeholder="Password" type="password" @bind-Value="validationModel.Password" />
                     </fieldset>
                 </CustomValidationForm>
             </div>
