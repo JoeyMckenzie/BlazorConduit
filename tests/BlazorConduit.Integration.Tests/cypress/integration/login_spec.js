@@ -52,7 +52,7 @@ describe('Login page', () => {
     });
 
     it('should proceed to login and redirect the user on a valid sign in', () => {
-        // Arrange, generate random UUIDs for username and email
+        // Arrange
         const email = Cypress.env('email')
         const password = Cypress.env('password')
 
