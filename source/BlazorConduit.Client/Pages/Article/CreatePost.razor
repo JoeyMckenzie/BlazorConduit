@@ -20,13 +20,13 @@
             <div class="col-md-10 offset-md-1 col-xs-12">
                 <CustomValidationForm TState="ArticleState" State="State" ValidationObject="validationModel" SubmitClickedCallback="OnPublishButtonClicked" ButtonText="Publish Article">
                     <fieldset class="form-group">
-                        <InputText class="form-control form-control-lg" placeholder="Article Title" @bind-Value="validationModel.Title" />
+                        <InputText id="create-post-title" class="form-control form-control-lg" placeholder="Article Title" @bind-Value="validationModel.Title" />
                     </fieldset>
                     <fieldset class="form-group">
-                        <InputText class="form-control" placeholder="What's this article about?" @bind-Value="validationModel.Description" />
+                        <InputText id="create-post-description" class="form-control" placeholder="What's this article about?" @bind-Value="validationModel.Description" />
                     </fieldset>
                     <fieldset class="form-group">
-                        <InputTextArea class="form-control" rows="8" placeholder="Write your article (in markdown)" @bind-Value="validationModel.Body" />
+                        <InputTextArea id="create-post-body" class="form-control" rows="8" placeholder="Write your article (in markdown)" @bind-Value="validationModel.Body" />
                     </fieldset>
                     <fieldset class="form-group">
                         <InputText class="form-control" placeholder="Enter tags" @bind-Value="tagList" /><div class="tag-list"></div>

@@ -15,12 +15,12 @@
 {
     @if (isCurrentUser)
     {
-        <button class="btn btn-sm btn-outline-secondary action-btn" @onclick="OnEditArticleClicked">
+        <button id="article-edit-button" class="btn btn-sm btn-outline-secondary action-btn" @onclick="OnEditArticleClicked">
             <i class="ion-gear-a"></i>
             &nbsp;
             Edit Article
         </button>
-        <button class="btn btn-outline-danger btn-sm" @onclick="() => StateFacade.DeleteArticle(Article.Slug!)">
+        <button id="article-delete-button" class="btn btn-outline-danger btn-sm" @onclick="() => StateFacade.DeleteArticle(Article.Slug!)">
             <i class="ion-trash-a"></i>
             &nbsp;
             Delete Article

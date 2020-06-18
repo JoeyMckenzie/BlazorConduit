@@ -19,7 +19,7 @@
         <div class="banner">
             <div class="container">
 
-                <h1>@article.Title</h1>
+                <h1 id="article-title">@article.Title</h1>
 
                 <div class="article-meta">
                     <a @onclick="() => StateFacade.GetUserProfile(string.IsNullOrWhiteSpace(article.Author.Username) ? string.Empty : article.Author.Username)"><img src="@article.Author.Image" /></a>
