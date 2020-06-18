@@ -1,34 +1,16 @@
-import uuid from 'uuid-js'
-
-describe('Register page', () => {
+describe('Login page', () => {
     it('should display error messages on invalid form submit', () => {
         // Arrange
         cy.visit('/');
-        cy.contains('Sign Up').click();
+        cy.contains('Sign In').click();
 
         // Act
         cy.get('[type=submit]').click();
 
         // Assert
         cy.get('.error-messages');
-        cy.contains('Username is required');
         cy.contains('Email is required');
         cy.contains('Password is required');
-    });
-
-    it('should remove username error message when valid data is entered', () => {
-        // Arrange
-        cy.get('.error-messages');
-        cy.contains('Username is required');
-
-        // Act
-        cy.get('#register-username-field')
-            .type('test')
-            .blur();
-
-        // Assert
-        cy.get('.error-messages');
-        cy.contains('Username is required').should('not.exist');
     });
 
     it('should remove email error message when valid data is entered', () => {
@@ -37,7 +19,7 @@ describe('Register page', () => {
         cy.contains('Email is required');
 
         // Act
-        cy.get('#register-email-field').type('test@gmail.com').blur();
+        cy.get('#login-email-field').type('test@gmail.com').blur();
 
         // Assert
         cy.get('.error-messages');
@@ -50,7 +32,7 @@ describe('Register page', () => {
         cy.contains('Password is required');
 
         // Act
-        cy.get('#register-password-field').type('test12345').blur();
+        cy.get('#login-password-field').type('test12345').blur();
 
         // Assert
         cy.get('.error-messages').should('not.have.html');
@@ -66,20 +48,17 @@ describe('Register page', () => {
 
         // Assert
         cy.get('.error-messages');
-        cy.contains('email has already been taken');
-        cy.contains('username has already been taken');
+        cy.contains('email or password is invalid');
     });
 
-    it('should proceed to register and redirect the user on a valid sign up', () => {
+    it('should proceed to login and redirect the user on a valid sign in', () => {
         // Arrange, generate random UUIDs for username and email
-        const randomUsername = uuid.create(4)
-            .toString()
-            .substring(0, 15);   
+        const email = Cypress.env('email')
+        const password = Cypress.env('password')
 
         // Act
-        cy.get('#register-username-field').clear().type(randomUsername);
-        cy.get('#register-email-field').clear().type(`${randomUsername}@gmail.com`);
-        cy.get('#register-password-field').clear().type('test12345');
+        cy.get('#login-email-field').clear().type(email);
+        cy.get('#login-password-field').clear().type(password);
         cy.get('[type=submit]').click();
 
         // Assert, wait for redirect to finish

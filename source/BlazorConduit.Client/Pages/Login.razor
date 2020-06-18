@@ -24,10 +24,10 @@
 
                 <CustomValidationForm TState="UserState" State="State" ButtonText="Sign in" SubmitClickedCallback="OnSignInClicked" ValidationObject="validationModel">
                     <fieldset class="form-group">
-                        <InputText class="form-control form-control-lg" placeholder="Email" type="email" @bind-Value="validationModel.Email" />
+                        <InputText id='login-email-field' class="form-control form-control-lg" placeholder="Email" type="email" @bind-Value="validationModel.Email" />
                     </fieldset>
                     <fieldset class="form-group">
-                        <InputText class="form-control form-control-lg" placeholder="Password" type="password" @bind-Value="validationModel.Password" />
+                        <InputText id='login-password-field' class="form-control form-control-lg" placeholder="Password" type="password" @bind-Value="validationModel.Password" />
                     </fieldset>
                 </CustomValidationForm>
             </div>
