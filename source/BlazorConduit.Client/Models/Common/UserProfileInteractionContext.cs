@@ -7,6 +7,7 @@
         Favorited,
         Authored,
         Feed,
-        Global
+        Global,
+        Tag
     }
 }

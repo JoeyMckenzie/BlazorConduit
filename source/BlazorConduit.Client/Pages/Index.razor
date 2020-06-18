@@ -28,28 +28,46 @@
             <div class="col-md-9">
                 <div class="feed-toggle">
                     <ul class="nav nav-pills outline-active">
-                        @if (feedContext == UserProfileInteractionContext.Feed && UserState.Value.IsAuthenticated)
+
+                        @if (!UserState.Value.IsAuthenticated)
                         {
-                            <li class="nav-item" style="cursor: pointer;">
+                            <li class="nav-item">
+                                <a class="nav-link active cursor-pointer">Global Feed</a>
+                            </li>
+                        }
+                        else if (feedContext == UserProfileInteractionContext.Feed)
+                        {
+                            <li class="nav-item">
                                 <a class="nav-link active">Your Feed</a>
                             </li>
-                            <li class="nav-item" style="cursor: pointer;">
-                                <a class="nav-link" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Global)">Favorited Articles</a>
+                            <li class="nav-item">
+                                <a class="nav-link cursor-pointer" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Global)">Global Feed</a>
+                            </li>
+                            if (isTagFeed)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link active">#@ArticleState.Value.CurrentSearchRequest!.Tag</a>
+                                </li>
+                            }
+                        }
+                        else if (feedContext == UserProfileInteractionContext.Global)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link cursor-pointer" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Feed)">Your Feed</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active cursor-pointer">Global Feed</a>
                             </li>
                         }
-                        else if (UserState.Value.IsAuthenticated)
+
+                        @* Render the tag feed if tag is being searched on *@
+                        @if (isTagFeed)
                         {
-                            <li class="nav-item" style="cursor: pointer;">
-                                <a class="nav-link" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Feed)">Your Feed</a>
-                            </li>
-                            <li class="nav-item" style="cursor: pointer;">
-                                <a class="nav-link active">Global Feed</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item" style="cursor: pointer;">
-                                <a class="nav-link" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Global)">Favorited Articles</a>
+                            <li class="nav-item">
+                                <a class="nav-link active">
+                                    <i class="ion-pound"></i>
+                                    @ArticleState.Value.CurrentSearchRequest!.Tag
+                                </a>
                             </li>
                         }
                     </ul>
@@ -112,5 +130,7 @@
                 break;
         }
     }
+
+    private bool isTagFeed => !(ArticleState.Value.CurrentSearchRequest is null) && !string.IsNullOrWhiteSpace(ArticleState.Value.CurrentSearchRequest.Tag);
 
 }
