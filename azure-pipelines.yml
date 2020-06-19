@@ -17,6 +17,14 @@ steps:
     packageType: 'sdk'
     useGlobalJson: true
 
+# Restore the project before building
+- task: DotNetCoreCLI@2
+  displayName: 'Restore client project'
+  inputs:
+    command: 'restore'
+    projects: '$(clientProjectPath)'
+    feedsToUse: 'select'
+
 # Build the client project
 - task: DotNetCoreCLI@2
   displayName: 'Build client project'
