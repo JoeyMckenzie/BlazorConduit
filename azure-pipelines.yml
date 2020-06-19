@@ -6,7 +6,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  clientProjectPath: 'source/BlazorConduit.Client/BlazorConduit.Client.csproj'
+  clientProjectPath: '$(Build.SourcesDirectory)/source/BlazorConduit.Client/BlazorConduit.Client.csproj'
   clientProjectDist: '$(Build.SourcesDirectory)/source/BlazorConduit.Client/dist'
 
 steps:
@@ -33,8 +33,10 @@ steps:
     projects: '$(clientProjectPath)'
     arguments: '-c $(buildConfiguration)'
 
+### PRODUCTION DEPLOYMENT STEPS ###
 # Build the distribution files for the client
 - task: DotNetCoreCLI@2
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   displayName: 'Publish client project'
   inputs:
     command: 'publish'
@@ -44,7 +46,6 @@ steps:
     zipAfterPublish: false
     modifyOutputPath: true
 
-### PRODUCTION DEPLOYMENT STEPS ###
 # Install netlify-cli
 - script: npm install netlify-cli 
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
