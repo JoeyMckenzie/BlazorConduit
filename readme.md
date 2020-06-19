@@ -4,6 +4,8 @@
 
 ### [Demo](https://blazor-conduit.netlify.app/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
+[![Build Status](https://dev.azure.com/joey32793/Blazor%20Conduit/_apis/build/status/joey32793.BlazorConduit?branchName=master)](https://dev.azure.com/joey32793/Blazor%20Conduit/_build/latest?definitionId=5&branchName=master)
+
 
 This codebase was created to demonstrate a fully fledged fullstack application built with Blazor WebAssembly including CRUD operations, authentication, routing, pagination, and more.
 
