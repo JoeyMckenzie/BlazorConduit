@@ -1,4 +1,4 @@
-# ![RealWorld Example App](blazor-logo.png)
+# ![RealWorld Example App](./source/BlazorConduit.Client/blazor-logo.png)
 
 > ### Blazor WebAssembly codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
 
