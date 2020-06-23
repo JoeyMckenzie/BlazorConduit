@@ -45,8 +45,9 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects
             }
 
             // Add limit and offset defaults
+            var pageOffset = action.SearchRequest.Offset > 0 ? (action.SearchRequest.Offset - 1) * action.SearchRequest.Limit : action.SearchRequest.Offset;
             queryString.Add("limit", action.SearchRequest.Limit.ToString());
-            queryString.Add("offset", action.SearchRequest.Offset.ToString());
+            queryString.Add("offset", pageOffset.ToString());
 
             try
             {

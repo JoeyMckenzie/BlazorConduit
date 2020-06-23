@@ -65,11 +65,11 @@ else if (!(Articles is null) && Articles.Any())
     {
         <nav>
             <ul class="pagination">
-                @for (var pageNumber = 1; pageNumber <= totalPages; pageNumber++)
+                @for (var pageNumber = 1; pageNumber < totalPages; pageNumber++)
                 {
                     var page = pageNumber;
 
-                    if (pageNumber == ArticleState.Value.CurrentSearchRequest.Offset + 1)
+                    if (pageNumber == ArticleState.Value.CurrentSearchRequest.Offset)
                     {
                         <li class="page-item active cursor-pointer">
                             <a class="page-link">@pageNumber</a>
@@ -151,7 +151,7 @@ else
                 author: ArticleState.Value.CurrentSearchRequest.Author,
                 favorited: ArticleState.Value.CurrentSearchRequest.Favorited,
                 limit: 10,
-                offset: page - 1);
+                offset: page);
         }
     }
 

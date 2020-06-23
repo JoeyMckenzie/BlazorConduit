@@ -35,6 +35,21 @@
                                 <a class="nav-link active cursor-pointer">Global Feed</a>
                             </li>
                         }
+                        else if (isTagFeed)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link cursor-pointer" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Feed)">Your Feed</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link cursor-pointer" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Global)">Global Feed</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active">
+                                    <i class="ion-pound"></i>
+                                    @ArticleState.Value.CurrentSearchRequest!.Tag
+                                </a>
+                            </li>
+                        }
                         else if (feedContext == UserProfileInteractionContext.Feed)
                         {
                             <li class="nav-item">
@@ -43,12 +58,6 @@
                             <li class="nav-item">
                                 <a class="nav-link cursor-pointer" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Global)">Global Feed</a>
                             </li>
-                            if (isTagFeed)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link active">#@ArticleState.Value.CurrentSearchRequest!.Tag</a>
-                                </li>
-                            }
                         }
                         else if (feedContext == UserProfileInteractionContext.Global)
                         {
@@ -56,18 +65,7 @@
                                 <a class="nav-link cursor-pointer" @onclick="() => OnFeedArticleClicked(UserProfileInteractionContext.Feed)">Your Feed</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active cursor-pointer">Global Feed</a>
-                            </li>
-                        }
-
-                        @* Render the tag feed if tag is being searched on *@
-                        @if (isTagFeed)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link active">
-                                    <i class="ion-pound"></i>
-                                    @ArticleState.Value.CurrentSearchRequest!.Tag
-                                </a>
+                                <a class="nav-link active">Global Feed</a>
                             </li>
                         }
                     </ul>
