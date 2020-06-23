@@ -1,9 +1,10 @@
-# ![RealWorld Example App](blazor-logo.png)
+![Realworld logo](./realworld-logo.png)
 
 > ### Blazor WebAssembly codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
 
+### [Demo](https://blazor-conduit.netlify.app/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
-### [Demo](https://devblogs.microsoft.com/aspnet/wp-content/uploads/sites/16/2019/04/BrandBlazor_nohalo_1000x.png)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
+[![Build Status](https://dev.azure.com/joey32793/Blazor%20Conduit/_apis/build/status/joey32793.BlazorConduit?branchName=master)](https://dev.azure.com/joey32793/Blazor%20Conduit/_build/latest?definitionId=5&branchName=master)
 
 
 This codebase was created to demonstrate a fully fledged fullstack application built with Blazor WebAssembly including CRUD operations, authentication, routing, pagination, and more.
@@ -12,12 +13,21 @@ We've gone to great lengths to adhere to the Blazor WebAssembly community styleg
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
-
 # How it works
 
-> Describe the general architecture of your app here
+This application is written according to the RealWorld frontend spec using [Blazor WebAssembly](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor). Following Blazor best practices, I decided to rely heavily on [Fluxor](https://github.com/mrpmorris/fluxor) utilizing redux throughout the application. For those new to Blazor, I would suggest reading the getting start docs from Microsoft before jumping into the codebase.
 
 # Getting started
+1. Clone/fork this repository
+2. Ensure you have the latest version of the [.NET Core SDK](https://dotnet.microsoft.com/download) installed (make sure you have the version used within `global.json`)
+3. `cd` into the `BlazorConduit.Client` project folder and run `dotnet watch run`
+4. The application should now be serving to `https://localhost:5001`
 
-> npm install, npm start, etc.
+#### Testing
+I use [cypress](https://www.cypress.io/) for integration and end-to-end testing, with plans of eventually adding [bUnit](https://github.com/rafritts/bunit) tests at some point. To run the tests:
+1. `cd` into the test project `BlazorConduit.Client.Tests`
+2. Ensure you have `npm` installed
+3. Run `npm install --save-dev`
+4. Cypress should now be installed, fire it up with `npx cypress open` from within the test project directory
+5. In the cypress window, you should now see all the spec files and be able to run them
 

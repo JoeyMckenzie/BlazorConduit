@@ -1,0 +1,57 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  clientProjectPath: '$(Build.SourcesDirectory)/source/BlazorConduit.Client/BlazorConduit.Client.csproj'
+  clientProjectDist: '$(Build.SourcesDirectory)/source/BlazorConduit.Client/dist'
+
+steps:
+# Use the SDK version in global.json  
+- task: UseDotNet@2
+  displayName: 'Install global.json SDK version'
+  inputs:
+    packageType: 'sdk'
+    useGlobalJson: true
+
+# Restore the project before building
+- task: DotNetCoreCLI@2
+  displayName: 'Restore client project'
+  inputs:
+    command: 'restore'
+    projects: '$(clientProjectPath)'
+    feedsToUse: 'select'
+
+# Build the client project
+- task: DotNetCoreCLI@2
+  displayName: 'Build client project'
+  inputs:
+    command: 'build'
+    projects: '$(clientProjectPath)'
+    arguments: '-c $(buildConfiguration)'
+
+### PRODUCTION DEPLOYMENT STEPS ###
+# Build the distribution files for the client
+- task: DotNetCoreCLI@2
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: 'Publish client project'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '$(clientProjectPath)'
+    arguments: '--no-restore --output $(Build.StagingDirectory)/dist'
+    zipAfterPublish: false
+    modifyOutputPath: true
+
+# Install netlify-cli
+- script: npm install netlify-cli 
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: 'Install netlify-cli'
+
+# Deploy the wwwroot directory from the distribution folder
+- script: npx netlify deploy --prod --dir $(Build.StagingDirectory)/dist/BlazorConduit.Client/wwwroot --site $(netlifySiteId) --auth $(netlifyApiKey)
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: 'Deploy client project to Netlify'
