@@ -8,7 +8,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^4.8.0",
-    "uuid-js": "^0.7.5"
+    "cypress": "^4.11.0",
+    "uuid-js": "0.7.5"
   }
 }

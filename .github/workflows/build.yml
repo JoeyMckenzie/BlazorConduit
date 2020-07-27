@@ -1,4 +1,4 @@
-name: .NET Core
+name: Blazor Conduit
 
 on:
   push:
@@ -12,19 +12,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Checkout master
     - uses: actions/checkout@v2
+
+    # Install .NET Core SDK, make sure to match the version in global.json
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.302
+
+    # Restore project dependencies
     - name: Install dependencies
       run: dotnet restore
+
+    # Build for production
     - name: Build
       run: dotnet build --configuration Release --no-restore
+
+    # Deploy to Netlify
     - name: Netlify Deploy
-      uses: jsmrcaga/action-netlify-deploy@v1.2.0
+      uses: jsmrcaga/action-netlify-deploy@master
       with:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_KEY }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_DEPLOY_TO_PROD: true
-
