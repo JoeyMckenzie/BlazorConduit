@@ -28,11 +28,16 @@ jobs:
     # Build for production
     - name: Build
       run: dotnet build --configuration Release --no-restore
+      
+    # Build for production
+    - name: Publish
+      run: dotnet publish --no-restore --output $GITHUB_WORKSPACE/dist
 
     # Deploy to Netlify
     - name: Netlify Deploy
       uses: jsmrcaga/action-netlify-deploy@master
       with:
+        build_directory: $GITHUB_WORKSPACE/dist/BlazorConduit.Client/wwwroot
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_KEY }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_DEPLOY_TO_PROD: true
