@@ -10,26 +10,6 @@ on:
       - master
 
 jobs:
-#  test_build:
-#    if: github.event_name == 'push'
-#    runs-on: ubuntu-latest
-#    name: Test the current build
-#    steps:
-#      - name: Setup .NET Core SDK
-#        uses: actions/setup-dotnet@v1.5.0
-#        with:
-#          dotnet-version: 3.1.302
-#
-#      - name: Install depedencies
-#        shell: bash
-#        run: |
-#          dotnet restore
-#
-#      - name: Run bUnit tests
-#        shell: bash
-#        run: |
-#          dotnet test tests/BlazorConduit.Client.Tests/BlazorConduit.Client.Tests.csproj
-#
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
@@ -60,6 +40,8 @@ jobs:
           dotnet publish --no-restore --output dist
           
       - name: Build And Deploy
+        # Only deploy in push to master
+        if: github.event_name == 'push'
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v0.0.1-preview
         with:
