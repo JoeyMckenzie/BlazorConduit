@@ -1,5 +1,6 @@
-﻿using BlazorConduit.Client.Models.Common;
+using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Articles.Actions.FollowUserFromArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.UnfollowUserFromArticle;
 using Fluxor;
@@ -13,10 +14,10 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects
     public class UnfollowUserFromArticleEffect : Effect<UnfollowUserFromArticleAction>
     {
         private readonly ILogger<UnfollowUserFromArticleEffect> _logger;
-        private readonly ConduitApiService _apiService;
-        private readonly SecurityTokenService _tokenService;
+        private readonly IConduitApiService _apiService;
+        private readonly ITokenService _tokenService;
 
-        public UnfollowUserFromArticleEffect(ILogger<UnfollowUserFromArticleEffect> logger, ConduitApiService apiService, SecurityTokenService tokenService) =>
+        public UnfollowUserFromArticleEffect(ILogger<UnfollowUserFromArticleEffect> logger, IConduitApiService apiService, ITokenService tokenService) =>
             (_logger, _apiService, _tokenService) = (logger, apiService, tokenService);
 
         protected override async Task HandleAsync(UnfollowUserFromArticleAction action, IDispatcher dispatcher)

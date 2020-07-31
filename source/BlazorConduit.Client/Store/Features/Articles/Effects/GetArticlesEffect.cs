@@ -1,6 +1,7 @@
-﻿using BlazorConduit.Client.Models.Articles.ViewModels;
+using BlazorConduit.Client.Models.Articles.ViewModels;
 using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Articles.Actions.GetArticles;
 using Fluxor;
 using Microsoft.AspNetCore.WebUtilities;
@@ -15,10 +16,10 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects
     public class GetArticlesEffect : Effect<GetArticlesAction>
     {
         private readonly ILogger<GetArticlesEffect> _logger;
-        private readonly ConduitApiService _apiService;
-        private readonly SecurityTokenService _tokenService;
+        private readonly IConduitApiService _apiService;
+        private readonly ITokenService _tokenService;
 
-        public GetArticlesEffect(ILogger<GetArticlesEffect> logger, ConduitApiService apiService, SecurityTokenService tokenService) =>
+        public GetArticlesEffect(ILogger<GetArticlesEffect> logger, IConduitApiService apiService, ITokenService tokenService) =>
             (_logger, _apiService, _tokenService) = (logger, apiService, tokenService);
 
         protected override async Task HandleAsync(GetArticlesAction action, IDispatcher dispatcher)

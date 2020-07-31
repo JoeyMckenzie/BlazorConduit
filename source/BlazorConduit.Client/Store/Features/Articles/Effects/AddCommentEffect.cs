@@ -1,6 +1,7 @@
-﻿using BlazorConduit.Client.Models.Articles.ViewModels;
+using BlazorConduit.Client.Models.Articles.ViewModels;
 using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Articles.Actions.AddComment;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -14,10 +15,10 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects
     public class AddCommentEffect : Effect<AddCommentAction>
     {
         private readonly ILogger<AddCommentEffect> _logger;
-        private readonly ConduitApiService _apiService;
-        private readonly SecurityTokenService _tokenService;
+        private readonly IConduitApiService _apiService;
+        private readonly ITokenService _tokenService;
 
-        public AddCommentEffect(ILogger<AddCommentEffect> logger, ConduitApiService apiService, SecurityTokenService tokenService) =>
+        public AddCommentEffect(ILogger<AddCommentEffect> logger, IConduitApiService apiService, ITokenService tokenService) =>
             (_logger, _apiService, _tokenService) = (logger, apiService, tokenService);
 
         protected override async Task HandleAsync(AddCommentAction action, IDispatcher dispatcher)

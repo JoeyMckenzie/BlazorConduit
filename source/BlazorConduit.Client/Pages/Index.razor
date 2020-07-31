@@ -1,14 +1,14 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 @page "/"
 
 @using BlazorConduit.Client.Models.Common
 @using BlazorConduit.Client.Pages.Article
-@using BlazorConduit.Client.Services
+@using BlazorConduit.Client.Services.Contracts
 @using BlazorConduit.Client.Store.State
 @using Fluxor
 
-@inject StateFacade StateFacade
+@inject IStateFacade StateFacade
 @inject IState<ArticleState> ArticleState
 @inject IState<UserState> UserState
 @inject IState<TagState> TagState
@@ -46,7 +46,7 @@
                             <li class="nav-item">
                                 <a class="nav-link active">
                                     <i class="ion-pound"></i>
-                                    @ArticleState.Value.CurrentSearchRequest!.Tag
+                                    <span>@ArticleState.Value.CurrentSearchRequest!.Tag</span>
                                 </a>
                             </li>
                         }

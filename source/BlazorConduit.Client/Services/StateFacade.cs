@@ -1,4 +1,4 @@
-﻿using BlazorConduit.Client.Models.Authentication.Requests;
+using BlazorConduit.Client.Models.Authentication.Requests;
 using Fluxor;
 using Microsoft.Extensions.Logging;
 using BlazorConduit.Client.Store.Features.Profiles.Actions.LoadUserProfile;
@@ -22,10 +22,11 @@ using BlazorConduit.Client.Store.Features.Articles.Actions.DeleteArticle;
 using BlazorConduit.Client.Store.Features.Articles.Actions.AddComment;
 using BlazorConduit.Client.Store.Features.Articles.Actions.DeleteComment;
 using BlazorConduit.Client.Store.Features.Tags.Actions.GetTags;
+using BlazorConduit.Client.Services.Contracts;
 
 namespace BlazorConduit.Client.Services
 {
-    public class StateFacade
+    public class StateFacade : IStateFacade
     {
         private readonly IDispatcher _dispatcher;
         private readonly ILogger<StateFacade> _logger;

@@ -1,6 +1,6 @@
-﻿using BlazorConduit.Client.Models.Articles.ViewModels;
+using BlazorConduit.Client.Models.Articles.ViewModels;
 using BlazorConduit.Client.Models.Common;
-using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Articles.Actions.LoadComments;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -13,10 +13,10 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects.LoadComments
     public class LoadCommentsEffect : Effect<LoadCommentsAction>
     {
         private readonly ILogger<LoadCommentsEffect> _logger;
-        private readonly SecurityTokenService _tokenService;
-        private readonly ConduitApiService _apiService;
+        private readonly ITokenService _tokenService;
+        private readonly IConduitApiService _apiService;
 
-        public LoadCommentsEffect(ILogger<LoadCommentsEffect> logger, SecurityTokenService tokenService, ConduitApiService apiService) =>
+        public LoadCommentsEffect(ILogger<LoadCommentsEffect> logger, ITokenService tokenService, IConduitApiService apiService) =>
             (_logger, _tokenService, _apiService) = (logger, tokenService, apiService);
 
         protected override async Task HandleAsync(LoadCommentsAction action, IDispatcher dispatcher)

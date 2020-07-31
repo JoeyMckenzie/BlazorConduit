@@ -1,6 +1,6 @@
-﻿using BlazorConduit.Client.Models.Common;
+using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Models.Profiles;
-using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Profiles.Actions.LoadUserProfile;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -12,12 +12,12 @@ namespace BlazorConduit.Client.Store.Features.Profiles.Effects.LoadUserProfile
 {
     public class LoadUserProfileEffect : Effect<LoadUserProfileAction>
     {
-        private readonly ConduitApiService _apiService;
+        private readonly IConduitApiService _apiService;
         private readonly ILogger<LoadUserProfileEffect> _logger;
-        private readonly SecurityTokenService _tokenService;
+        private readonly ITokenService _tokenService;
 
 
-        public LoadUserProfileEffect(ConduitApiService apiService, ILogger<LoadUserProfileEffect> logger, SecurityTokenService tokenService) =>
+        public LoadUserProfileEffect(IConduitApiService apiService, ILogger<LoadUserProfileEffect> logger, ITokenService tokenService) =>
             (_apiService, _logger, _tokenService) = (apiService, logger, tokenService);
 
         protected override async Task HandleAsync(LoadUserProfileAction action, IDispatcher dispatcher)

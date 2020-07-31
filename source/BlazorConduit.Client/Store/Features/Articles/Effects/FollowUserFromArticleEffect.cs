@@ -1,5 +1,6 @@
-﻿using BlazorConduit.Client.Models.Common;
+using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Articles.Actions.FollowUserFromArticle;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -12,10 +13,10 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects.FollowUserFromArt
     public class FollowUserFromArticleEffect : Effect<FollowUserFromArticleAction>
     {
         private readonly ILogger<FollowUserFromArticleEffect> _logger;
-        private readonly ConduitApiService _apiService;
-        private readonly SecurityTokenService _tokenService;
+        private readonly IConduitApiService _apiService;
+        private readonly ITokenService _tokenService;
 
-        public FollowUserFromArticleEffect(ILogger<FollowUserFromArticleEffect> logger, ConduitApiService apiService, SecurityTokenService tokenService) =>
+        public FollowUserFromArticleEffect(ILogger<FollowUserFromArticleEffect> logger, IConduitApiService apiService, ITokenService tokenService) =>
             (_logger, _apiService, _tokenService) = (logger, apiService, tokenService);
 
         protected override async Task HandleAsync(FollowUserFromArticleAction action, IDispatcher dispatcher)

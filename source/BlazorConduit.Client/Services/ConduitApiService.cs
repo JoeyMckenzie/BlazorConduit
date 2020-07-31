@@ -1,11 +1,12 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using BlazorConduit.Client.Services.Contracts;
 
 namespace BlazorConduit.Client.Services
 {
-    public class ConduitApiService
+    public class ConduitApiService : IConduitApiService
     {
         private readonly HttpClient _httpClient;
 

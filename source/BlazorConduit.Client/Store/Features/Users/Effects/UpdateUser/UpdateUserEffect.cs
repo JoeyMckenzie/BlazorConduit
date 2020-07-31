@@ -1,6 +1,6 @@
-﻿using BlazorConduit.Client.Models.Authentication.ViewModels;
+using BlazorConduit.Client.Models.Authentication.ViewModels;
 using BlazorConduit.Client.Models.Common;
-using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Users.Actions.UpdateUser;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -13,16 +13,16 @@ namespace BlazorConduit.Client.Store.Features.Users.Effects.UpdateUser
 {
     public class UpdateUserEffect : Effect<UpdateUserAction>
     {
-        private readonly ConduitApiService _apiService;
-        private readonly ErrorFormattingService _formattingService;
+        private readonly IConduitApiService _apiService;
+        private readonly IErrorFormattingService _formattingService;
         private readonly ILogger<UpdateUserEffect> _logger;
-        private readonly SecurityTokenService _tokenService;
+        private readonly ITokenService _tokenService;
 
         public UpdateUserEffect(
-            ConduitApiService apiService,
-            ErrorFormattingService formattingService,
+            IConduitApiService apiService,
+            IErrorFormattingService formattingService,
             ILogger<UpdateUserEffect> logger,
-            SecurityTokenService tokenService)
+            ITokenService tokenService)
         {
             _apiService = apiService;
             _formattingService = formattingService;

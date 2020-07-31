@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text.Json;
+using BlazorConduit.Client.Services.Contracts;
 
 namespace BlazorConduit.Client.Services
 {
-    public class ErrorFormattingService
+    public class ErrorFormattingService : IErrorFormattingService
     {
         public IEnumerable<string> GetFriendlyErrors(object? apiErrors)
         {

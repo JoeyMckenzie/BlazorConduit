@@ -1,18 +1,18 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 @page "/profile/{username}"
 
 @using BlazorConduit.Client.Models.Common
 @using BlazorConduit.Client.Models.Profiles
 @using BlazorConduit.Client.Pages.Article
-@using BlazorConduit.Client.Services
+@using BlazorConduit.Client.Services.Contracts
 @using BlazorConduit.Client.Store.State
 @using Fluxor 
 
 @inject IState<ProfileState> ProfileState
 @inject IState<UserState> UserState
 @inject IState<ArticleState> ArticleState  
-@inject StateFacade StateFacade
+@inject IStateFacade StateFacade
 @inject NavigationManager Navigation
 
 @if (ProfileState.Value.IsLoading)

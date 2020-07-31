@@ -1,12 +1,12 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 @using BlazorConduit.Client.Models.Articles.Dtos
 @using BlazorConduit.Client.Models.Articles.Requests
-@using BlazorConduit.Client.Services 
+@using BlazorConduit.Client.Services.Contracts 
 @using BlazorConduit.Client.Store.State
 @using Fluxor
 
-@inject StateFacade StateFacade
+@inject IStateFacade StateFacade
 @inject IState<UserState> UserState
 
 <div class="col-xs-12 col-md-8 offset-md-2">

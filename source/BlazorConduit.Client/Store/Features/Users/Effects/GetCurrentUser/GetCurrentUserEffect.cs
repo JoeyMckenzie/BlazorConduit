@@ -1,6 +1,6 @@
-﻿using BlazorConduit.Client.Models.Authentication.ViewModels;
+using BlazorConduit.Client.Models.Authentication.ViewModels;
 using BlazorConduit.Client.Models.Common;
-using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Users.Actions.GetCurrentUser;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -12,14 +12,14 @@ namespace BlazorConduit.Client.Store.Features.Users.Effects.GetCurrentUser
 {
     public class GetCurrentUserEffect : Effect<GetCurrentUserAction>
     {
-        private readonly SecurityTokenService _tokenService;
+        private readonly ITokenService _tokenService;
         private readonly ILogger<GetCurrentUserEffect> _logger;
-        private readonly ConduitApiService _apiService;
+        private readonly IConduitApiService _apiService;
 
         public GetCurrentUserEffect(
-            SecurityTokenService tokenService,
+            ITokenService tokenService,
             ILogger<GetCurrentUserEffect> logger,
-            ConduitApiService apiService)
+            IConduitApiService apiService)
         {
             _tokenService = tokenService;
             _logger = logger;

@@ -1,16 +1,16 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 @page "/register"
 
 @using BlazorConduit.Client.Models.Authentication.Dtos
 @using BlazorConduit.Client.Models.Authentication.Requests
 @using BlazorConduit.Client.Models.Authentication.Validation
-@using BlazorConduit.Client.Services
+@using BlazorConduit.Client.Services.Contracts
 @using BlazorConduit.Client.Store.State
 @using Fluxor
 
 @inject IState<UserState> State
-@inject StateFacade StateFacade
+@inject IStateFacade StateFacade
 
 <div class="auth-page">
     <div class="container page">

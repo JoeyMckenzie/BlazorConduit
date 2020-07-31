@@ -1,6 +1,7 @@
-﻿using BlazorConduit.Client.Models.Articles.ViewModels;
+using BlazorConduit.Client.Models.Articles.ViewModels;
 using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Articles.Actions.FavoritePostFromArticle;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -14,10 +15,10 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects
     public class FavoritePostFromArticleEffect : Effect<FavoritePostFromArticleAction>
     {
         private readonly ILogger<FavoritePostFromArticleEffect> _logger;
-        private readonly ConduitApiService _apiService;
-        private readonly SecurityTokenService _tokenService;
+        private readonly IConduitApiService _apiService;
+        private readonly ITokenService _tokenService;
 
-        public FavoritePostFromArticleEffect(ILogger<FavoritePostFromArticleEffect> logger, ConduitApiService apiService, SecurityTokenService tokenService) =>
+        public FavoritePostFromArticleEffect(ILogger<FavoritePostFromArticleEffect> logger, IConduitApiService apiService, ITokenService tokenService) =>
             (_logger, _apiService, _tokenService) = (logger, apiService, tokenService);
 
         protected override async Task HandleAsync(FavoritePostFromArticleAction action, IDispatcher dispatcher)

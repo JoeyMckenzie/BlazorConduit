@@ -1,6 +1,6 @@
-﻿using BlazorConduit.Client.Models.Common;
+using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Models.Profiles;
-using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Profiles.Actions.UnfollowUserFromProfile;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -14,10 +14,10 @@ namespace BlazorConduit.Client.Store.Features.Profiles.Effects.UnfollowUserFromP
     public class UnfollowUserEffect : Effect<UnfollowUserFromProfileAction>
     {
         private readonly ILogger<UnfollowUserEffect> _logger;
-        private readonly ConduitApiService _apiService;
-        private readonly SecurityTokenService _tokenService;
+        private readonly IConduitApiService _apiService;
+        private readonly ITokenService _tokenService;
 
-        public UnfollowUserEffect(ILogger<UnfollowUserEffect> logger, ConduitApiService apiService, SecurityTokenService tokenService) =>
+        public UnfollowUserEffect(ILogger<UnfollowUserEffect> logger, IConduitApiService apiService, ITokenService tokenService) =>
             (_logger, _apiService, _tokenService) = (logger, apiService, tokenService);
 
         protected override async Task HandleAsync(UnfollowUserFromProfileAction action, IDispatcher dispatcher)

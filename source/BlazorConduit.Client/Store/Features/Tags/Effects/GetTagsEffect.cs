@@ -1,6 +1,6 @@
-﻿using BlazorConduit.Client.Models.Common;
+using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Models.Tags.Dtos;
-using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Tags.Actions.GetTags;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -13,10 +13,10 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects
     public class GetTagsEffect : Effect<GetTagsAction>
     {
         private readonly ILogger<GetTagsEffect> _logger;
-        private readonly ConduitApiService _apiService;
-        private readonly SecurityTokenService _tokenService;
+        private readonly IConduitApiService _apiService;
+        private readonly ITokenService _tokenService;
 
-        public GetTagsEffect(ILogger<GetTagsEffect> logger, ConduitApiService apiService, SecurityTokenService tokenService) =>
+        public GetTagsEffect(ILogger<GetTagsEffect> logger, IConduitApiService apiService, ITokenService tokenService) =>
             (_logger, _apiService, _tokenService) = (logger, apiService, tokenService);
 
         protected override async Task HandleAsync(GetTagsAction action, IDispatcher dispatcher)

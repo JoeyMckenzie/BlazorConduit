@@ -1,4 +1,4 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 @page "/editor"
 
@@ -6,11 +6,11 @@
 @using BlazorConduit.Client.Models.Articles.Dtos
 @using BlazorConduit.Client.Models.Articles.Requests
 @using BlazorConduit.Client.Models.Articles.Validation
-@using BlazorConduit.Client.Services
+@using BlazorConduit.Client.Services.Contracts
 @using BlazorConduit.Client.Store.State
 @using Fluxor
 
-@inject StateFacade StateFacade
+@inject IStateFacade StateFacade
 @inject IState<ArticleState> State
 
 <div class="editor-page">

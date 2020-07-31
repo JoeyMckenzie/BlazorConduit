@@ -1,6 +1,6 @@
-﻿using BlazorConduit.Client.Models.Articles.ViewModels;
+using BlazorConduit.Client.Models.Articles.ViewModels;
 using BlazorConduit.Client.Models.Common;
-using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Articles.Actions.UpdateArticle;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -14,15 +14,15 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects.UpdateArticle
     public class UpdateArticleEffect : Effect<UpdateArticleAction>
     {
         private readonly ILogger<UpdateArticleEffect> _logger;
-        private readonly SecurityTokenService _tokenService;
-        private readonly ConduitApiService _apiService;
-        private readonly ErrorFormattingService _formattingService;
+        private readonly ITokenService _tokenService;
+        private readonly IConduitApiService _apiService;
+        private readonly IErrorFormattingService _formattingService;
 
         public UpdateArticleEffect(
             ILogger<UpdateArticleEffect> logger,
-            SecurityTokenService tokenService,
-            ConduitApiService apiService,
-            ErrorFormattingService formattingService)
+            ITokenService tokenService,
+            IConduitApiService apiService,
+            IErrorFormattingService formattingService)
         {
             _logger = logger;
             _tokenService = tokenService;

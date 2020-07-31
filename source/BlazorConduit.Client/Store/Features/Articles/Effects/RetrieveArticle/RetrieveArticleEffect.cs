@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using BlazorConduit.Client.Models.Articles.ViewModels;
 using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Articles.Actions.RetrieveArticle;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -13,10 +14,10 @@ namespace BlazorConduit.Client.Store.Features.Articles.Effects.RetrieveArticle
     public class RetrieveArticleEffect : Effect<RetrieveArticleAction>
     {
         private readonly ILogger<RetrieveArticleEffect> _logger;
-        private readonly SecurityTokenService _tokenService;
-        private readonly ConduitApiService _apiService;
+        private readonly ITokenService _tokenService;
+        private readonly IConduitApiService _apiService;
 
-        public RetrieveArticleEffect(ILogger<RetrieveArticleEffect> logger, SecurityTokenService tokenService, ConduitApiService apiService) =>
+        public RetrieveArticleEffect(ILogger<RetrieveArticleEffect> logger, ITokenService tokenService, IConduitApiService apiService) =>
             (_logger, _tokenService, _apiService) = (logger, tokenService, apiService);
 
         protected override async Task HandleAsync(RetrieveArticleAction action, IDispatcher dispatcher)

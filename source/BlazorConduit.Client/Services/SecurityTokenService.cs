@@ -1,4 +1,5 @@
-﻿using BlazorConduit.Client.Store.State;
+using BlazorConduit.Client.Services.Contracts;
+using BlazorConduit.Client.Store.State;
 using Blazored.LocalStorage;
 using Fluxor;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BlazorConduit.Client.Services
 {
-    public class SecurityTokenService
+    public class SecurityTokenService : ITokenService
     {
         private readonly ILocalStorageService _storageService;
         private readonly IState<UserState> _state;
@@ -16,10 +17,8 @@ namespace BlazorConduit.Client.Services
         public SecurityTokenService(ILocalStorageService storageService, IState<UserState> state) =>
             (_storageService, _state) = (storageService, state);
 
-        public Task SetTokenAsync(string token)
-        {
-            return _storageService.SetItemAsync("token", token);
-        }
+        public Task SetTokenAsync(string token) =>
+            _storageService.SetItemAsync("token", token);
 
         public Task<string?> GetTokenAsync()
         {

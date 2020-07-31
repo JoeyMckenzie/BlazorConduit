@@ -1,6 +1,6 @@
-﻿using BlazorConduit.Client.Models.Authentication.ViewModels;
+using BlazorConduit.Client.Models.Authentication.ViewModels;
 using BlazorConduit.Client.Models.Common;
-using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Users.Actions.RegisterUser;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -13,11 +13,11 @@ namespace BlazorConduit.Client.Store.Features.Users.Effects.RegisterUser
 {
     public class RegisterUserEffect : Effect<RegisterUserAction>
     {
-        private readonly ConduitApiService _apiService;
-        private readonly ErrorFormattingService _formattingService;
+        private readonly IConduitApiService _apiService;
+        private readonly IErrorFormattingService _formattingService;
         private readonly ILogger<RegisterUserEffect> _logger;
 
-        public RegisterUserEffect(ConduitApiService apiService, ErrorFormattingService formattingService, ILogger<RegisterUserEffect> logger) =>
+        public RegisterUserEffect(IConduitApiService apiService, IErrorFormattingService formattingService, ILogger<RegisterUserEffect> logger) =>
             (_apiService, _formattingService, _logger) = (apiService, formattingService, logger);
 
         protected override async Task HandleAsync(RegisterUserAction action, IDispatcher dispatcher)

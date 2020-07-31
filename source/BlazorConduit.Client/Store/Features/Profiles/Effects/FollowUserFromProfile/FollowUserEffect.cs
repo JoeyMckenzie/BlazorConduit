@@ -1,6 +1,6 @@
-﻿using BlazorConduit.Client.Models.Common;
+using BlazorConduit.Client.Models.Common;
 using BlazorConduit.Client.Models.Profiles;
-using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Profiles.Actions.FollowUserFromProfile;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -14,10 +14,10 @@ namespace BlazorConduit.Client.Store.Features.Profiles.Effects.FollowUserFromPro
     public class FollowUserEffect : Effect<FollowUserFromProfileAction>
     {
         private readonly ILogger<FollowUserEffect> _logger;
-        private readonly ConduitApiService _apiService;
-        private readonly SecurityTokenService _tokenService;
+        private readonly IConduitApiService _apiService;
+        private readonly ITokenService _tokenService;
 
-        public FollowUserEffect(ILogger<FollowUserEffect> logger, ConduitApiService apiService, SecurityTokenService tokenService) =>
+        public FollowUserEffect(ILogger<FollowUserEffect> logger, IConduitApiService apiService, ITokenService tokenService) =>
             (_logger, _apiService, _tokenService) = (logger, apiService, tokenService);
 
         protected override async Task HandleAsync(FollowUserFromProfileAction action, IDispatcher dispatcher)

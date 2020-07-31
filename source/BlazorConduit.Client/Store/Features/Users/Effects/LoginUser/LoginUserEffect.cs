@@ -1,6 +1,6 @@
-﻿using BlazorConduit.Client.Models.Authentication.ViewModels;
+using BlazorConduit.Client.Models.Authentication.ViewModels;
 using BlazorConduit.Client.Models.Common;
-using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Users.Actions.LoginUser;
 using Fluxor;
 using Microsoft.Extensions.Logging;
@@ -13,11 +13,11 @@ namespace BlazorConduit.Client.Store.Features.Users.Effects.LoginUser
 {
     public class LoginUserEffect : Effect<LoginUserAction>
     {
-        private readonly ConduitApiService _apiService;
-        private readonly ErrorFormattingService _formattingService;
+        private readonly IConduitApiService _apiService;
+        private readonly IErrorFormattingService _formattingService;
         private readonly ILogger<LoginUserEffect> _logger;
 
-        public LoginUserEffect(ConduitApiService apiService, ErrorFormattingService formattingService, ILogger<LoginUserEffect> logger) =>
+        public LoginUserEffect(IConduitApiService apiService, IErrorFormattingService formattingService, ILogger<LoginUserEffect> logger) =>
             (_apiService, _formattingService, _logger) = (apiService, formattingService, logger);
 
         protected override async Task HandleAsync(LoginUserAction action, IDispatcher dispatcher)

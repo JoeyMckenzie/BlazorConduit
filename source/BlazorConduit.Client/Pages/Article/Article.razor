@@ -1,15 +1,15 @@
-﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 @page "/article/{articleSlug}"
 
 @using BlazorConduit.Client.Models.Articles.Dtos
-@using BlazorConduit.Client.Services 
+@using BlazorConduit.Client.Services.Contracts
 @using BlazorConduit.Client.Store.State 
 @using Fluxor
 
 @inject IState<ArticleState> ArticleState
 @inject IState<UserState> UserState
-@inject StateFacade StateFacade
+@inject IStateFacade StateFacade
 @inject NavigationManager Navigation
 
 @if (!(article is null) && !(article.Author is null))

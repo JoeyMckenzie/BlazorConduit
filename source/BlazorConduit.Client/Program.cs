@@ -9,6 +9,7 @@ using Fluxor;
 using System.Reflection;
 using Blazored.LocalStorage;
 using BlazorConduit.Client;
+using BlazorConduit.Client.Services.Contracts;
 
 namespace BlazorConduit
 {
@@ -24,10 +25,10 @@ namespace BlazorConduit
             builder.Services.AddTransient(_ => new HttpClient { BaseAddress = new Uri("https://conduit.productionready.io/api/") });
 
             // Add custom services
-            builder.Services.TryAddScoped<ConduitApiService>();
-            builder.Services.TryAddScoped<StateFacade>();
-            builder.Services.TryAddScoped<ErrorFormattingService>();
-            builder.Services.TryAddScoped<SecurityTokenService>();
+            builder.Services.TryAddTransient<IConduitApiService, ConduitApiService>();
+            builder.Services.TryAddTransient<IStateFacade, StateFacade>();
+            builder.Services.TryAddSingleton<IErrorFormattingService, ErrorFormattingService>();
+            builder.Services.TryAddTransient<ITokenService, SecurityTokenService>();
 
             // Add package services
             builder.Services.AddBlazoredLocalStorage();

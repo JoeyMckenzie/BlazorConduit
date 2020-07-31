@@ -1,4 +1,4 @@
-﻿using BlazorConduit.Client.Services;
+using BlazorConduit.Client.Services.Contracts;
 using BlazorConduit.Client.Store.Features.Users.Actions.GetCurrentUser;
 using BlazorConduit.Client.Store.Features.Users.Effects.LoginUser;
 using Fluxor;
@@ -10,12 +10,12 @@ namespace BlazorConduit.Client.Store.Features.Users.Effects.GetCurrentUser
 {
     public class GetCurrentUserFailureEffect : Effect<GetCurrentUserFailureAction>
     {
-        private readonly SecurityTokenService _tokenService;
+        private readonly ITokenService _tokenService;
         private readonly ILogger<LoginUserSuccessEffect> _logger;
         private readonly NavigationManager _navigation;
 
         public GetCurrentUserFailureEffect(
-            SecurityTokenService tokenService,
+            ITokenService tokenService,
             ILogger<LoginUserSuccessEffect> logger,
             NavigationManager navigation)
         {
