@@ -127,6 +127,14 @@ else if (!(userProfile is null))
         StateFacade.GetArticles(author: Username, limit: 5, offset: 0);
     }
 
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            base.Dispose(disposing);
+        }
+    }
+
     private void RefreshProfileState(object sender, ProfileState state)
     {
         userProfile = state.CurrentProfile;

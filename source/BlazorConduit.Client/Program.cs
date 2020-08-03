@@ -22,10 +22,10 @@ namespace BlazorConduit
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            builder.Services.AddTransient(_ => new HttpClient { BaseAddress = new Uri("https://conduit.productionready.io/api/") });
 
             // Add custom services
-            builder.Services.TryAddTransient<IConduitApiService, ConduitApiService>();
+            builder.Services.AddHttpClient<IConduitApiService, ConduitApiService>(client =>
+                client.BaseAddress = new Uri("https://conduit.productionready.io/api/"));
             builder.Services.TryAddTransient<IStateFacade, StateFacade>();
             builder.Services.TryAddSingleton<IErrorFormattingService, ErrorFormattingService>();
             builder.Services.TryAddTransient<ITokenService, SecurityTokenService>();

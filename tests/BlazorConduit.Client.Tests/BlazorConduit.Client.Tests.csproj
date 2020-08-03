@@ -27,4 +27,7 @@
     <ProjectReference Include="..\..\source\BlazorConduit.Client\BlazorConduit.Client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mocks\" />
+  </ItemGroup>
 </Project>
