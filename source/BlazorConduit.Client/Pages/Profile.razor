@@ -112,16 +112,15 @@ else if (!(userProfile is null))
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
-
-        ProfileState.StateChanged += RefreshProfileState;
-
         if (string.IsNullOrWhiteSpace(Username))
         {
             Navigation.NavigateTo("/");
             return;
         }
 
+        await base.OnInitializedAsync();
+
+        ProfileState.StateChanged += RefreshProfileState;
         StateFacade.GetUserProfile(Username);
         feedContext = UserProfileInteractionContext.Authored;
         StateFacade.GetArticles(author: Username, limit: 5, offset: 0);
