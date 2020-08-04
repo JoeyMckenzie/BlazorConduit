@@ -27,7 +27,7 @@ This application is written according to the RealWorld frontend spec using [Blaz
 
 #### Testing
 I use [cypress](https://www.cypress.io/) for integration and end-to-end testing, with plans of eventually adding [bUnit](https://github.com/rafritts/bunit) tests at some point. To run the tests:
-1. `cd` into the test project `BlazorConduit.Client.Tests`
+1. `cd` into the test project `BlazorConduit.Integration.Tests`
 2. Ensure you have `npm` installed
 3. Run `npm install --save-dev`
 4. Cypress should now be installed, fire it up with `npx cypress open` from within the test project directory

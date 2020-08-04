@@ -39,7 +39,7 @@ namespace BlazorConduit.Client.Tests.Pages
         public void GivenPageIsLoading_WhenProfileStateIsAvailable_DisplaysCorrectMarkup()
         {
             // Arrange
-            var expectedHtml = "<span>Loading profile...</span>";
+            const string expectedHtml = "<span>Loading profile...</span>";
             var isLoadingProfileState = new ProfileState(true, null, null);
             _mockProfileState.Setup(m => m.Value).Returns(isLoadingProfileState);
 
@@ -64,6 +64,8 @@ namespace BlazorConduit.Client.Tests.Pages
             // Assert
             navigationManager.ShouldNotBeNull();
             navigationManager!.NavigateToLocation.ShouldBe("/");
+            _mockFacade.Verify(m => m.GetUserProfile(It.IsAny<string>()), Times.Never);
+            _mockFacade.Verify(m => m.GetArticles(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
     }
 }
