@@ -3,7 +3,7 @@
         {
             "route": "/login",
             "serve": "/login",
-            "statusCode": 200
+            "statusCode": 301
         }
     ]
 }
