@@ -1,0 +1,9 @@
+{
+    "routes": [
+        {
+            "route": "/login",
+            "serve": "/login",
+            "statusCode": 200
+        }
+    ]
+}
